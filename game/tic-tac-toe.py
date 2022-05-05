@@ -33,7 +33,12 @@ class TicTacToe:
         self.buttonList = []
         for r in range(3):
             for c in range(3):
-                self.buttonList.append(Button(self.frame,image=self.img_empty,text=0, command=lambda R=r, C=c:self.press(R,C),width=94,height=94))
+                if r == 0:
+                    self.buttonList.append(Button(self.frame,image=self.img_empty,text=0, command=lambda R=r, C=c:self.press(R,C),width=94,height=94,bg = '#ffd6d6' ))
+                elif r == 1:
+                    self.buttonList.append(Button(self.frame,image=self.img_empty,text=0, command=lambda R=r, C=c:self.press(R,C),width=94,height=94,bg = '#feffd6' ))
+                elif r == 2:
+                    self.buttonList.append(Button(self.frame,image=self.img_empty,text=0, command=lambda R=r, C=c:self.press(R,C),width=94,height=94,bg = '#d8ffd6' ))
                 self.buttonList[r*3+c].grid(row=r,column=c)
 
     def press(self,r,c):
@@ -79,4 +84,4 @@ class TicTacToe:
         self.window.mainloop()
     
 ttt = TicTacToe()
-# ttt.loop()
+ttt.loop()
