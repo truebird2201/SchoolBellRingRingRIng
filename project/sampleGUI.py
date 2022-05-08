@@ -33,7 +33,7 @@ def InitScreen():
     LBScrollbar = Scrollbar(frameCombo)
     SearchListBox = Listbox(frameCombo, \
         font=fontNormal, activestyle='none', width=10, height=1, borderwidth=12, relief='ridge', yscrollcommand=LBScrollbar.set) 
-    slist = ["도서관", "모범음식점", "마트", "문화공간"]
+    slist = ["초등학교", "중학교", "고등학교", "대학교"]
     for i, s in enumerate(slist): 
         SearchListBox.insert(i, s)
     SearchListBox.pack(side='left', padx=10, expand=True, fill="both")
@@ -87,7 +87,7 @@ def SearchLibrary(): # "검색" 버튼 -> "도서관"
     global listBox
     listBox.delete(0,listBox.size()) 
     
-    with open('서울도서관.xml', 'rb') as f: 
+    with open('project/xml/초중고등학교현황.xml', 'rb') as f: 
         strXml = f.read().decode('utf-8')
     parseData = ElementTree.fromstring(strXml) 
     
@@ -95,14 +95,13 @@ def SearchLibrary(): # "검색" 버튼 -> "도서관"
 
     i = 1
     for item in elements: # " row“ element들
-        part_el = item.find('CODE_VALUE')
+        part_el = item.find('SIGUN_NM')
         if InputLabel.get() not in part_el.text: 
             continue 
     
         _text = '[' + str(i) + '] ' + \
-            getStr(item.find('LBRRY_NAME').text) + \
-            ' : ' + getStr(item.find('ADRES').text) + \
-            ' : ' + getStr(item.find('TEL_NO').text)
+            getStr(item.find('FACLT_NM').text) + \
+            ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
         listBox.insert(i-1, _text)
         i = i+1
 
