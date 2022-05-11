@@ -104,6 +104,24 @@ def SearchLibrary(): # "검색" 버튼 -> "도서관"
             ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
         listBox.insert(i-1, _text)
         i = i+1
+    
+    with open('project/xml/전문및대학교현황.xml', 'rb') as f: 
+        strXml = f.read().decode('utf-8')
+    parseData = ElementTree.fromstring(strXml) 
+    
+    elements = parseData.iter('row')
+
+    i = 1
+    for item in elements: # " row“ element들
+        part_el = item.find('SIGUN_NM')
+        if InputLabel.get() not in part_el.text: 
+            continue 
+    
+        _text = '[' + str(i) + '] ' + \
+            getStr(item.find('FACLT_NM').text) + \
+            ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+        listBox.insert(i-1, _text)
+        i = i+1
 
 
 
