@@ -73,10 +73,17 @@ class Cell(Canvas):
             print(True)
             
 
+def press(list , bt):
+    if (bt['text'] == "새로 시작"):
+        reset(list)
+    else:
+        bt.configure(text="새로 시작")
 
 def reset(list):
-    list = [[Cell(frame1, r, c, width = 20, height = 20) for c in range(_MAXCOL)] for r in range(_MAXROW)]
-
+    for r in range(_MAXROW):
+        for c in range(_MAXCOL):
+            list[r][c].setColor("white")
+    
 
 
 window = Tk() # Create a window
@@ -87,8 +94,10 @@ frame1.pack()
 frame2 = Frame(window)
 frame2.pack()
 cells = [[Cell(frame1, r, c, width = 20, height = 20) for c in range(_MAXCOL)] for r in range(_MAXROW)]
-botton = Button(frame2,text="새로 시작",width=10,height=2).grid(row=0,column=0, command=reset(cells))
-        
+botton = Button(frame2,text="새로 시작",width=10,height=2)
+botton.configure(command=lambda list=cells, b=botton : press(list, b))
+botton.grid(row=0,column=0)
+
 for cell in cells:
     for c in cell:
         c.grid(row = c.row, column = c.col)
