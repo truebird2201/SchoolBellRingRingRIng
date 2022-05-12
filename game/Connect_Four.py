@@ -1,4 +1,6 @@
 from tkinter import *
+
+from setuptools import Command
 _MAXROW = 6
 _MAXCOL = 7
 
@@ -22,44 +24,58 @@ class Cell(Canvas):
         nextcolor = "red" if self.color != "red" else "yellow"
         self.setColor(nextcolor)
 
-        Cell.Check()
+        self.Check()
     
     def __CheckVertical():
         for r in range(0, _MAXROW):
             for c in range(0, _MAXCOL - 3):
-                if cells[r*_MAXROW + c].color == cells[r*_MAXROW + c + 1].color and \
-                    cells[r*_MAXROW + c].color == cells[r*_MAXROW + c + 2].color and \
-                    cells[r*_MAXROW + c].color == cells[r*_MAXROW + c + 3].color and \
-                    cells[r*_MAXROW + c].color != "white":
+                if cells[r][c].color == cells[r][c+1].color and \
+                    cells[r][c].color == cells[r][c+2].color and \
+                    cells[r][c].color == cells[r][c+3].color and \
+                    cells[r][c].color != "white":
                     return True
         return False
 
     def __CheckHorizontal():
         for r in range(0, _MAXROW-3):
             for c in range(0, _MAXCOL):
-                if cells[r*_MAXROW + c].color == cells[(r+1)*_MAXROW + c].color and \
-                    cells[r*_MAXROW + c].color == cells[(r+2)*_MAXROW + c].color and \
-                    cells[r*_MAXROW + c].color == cells[(r+3)*_MAXROW + c].color and \
-                    cells[r*_MAXROW + c].color != "white":
+                if cells[r][c].color == cells[r+1][c].color and \
+                    cells[r][c].color == cells[r+2][c].color and \
+                    cells[r][c].color == cells[r+3][c].color and \
+                    cells[r][c].color != "white":
                     return True
         return False
 
     def __CheckDiag1():
-        
+        for r in range(0, _MAXROW):
+            for c in range(0, _MAXCOL):
+                if r + 3 < _MAXROW and c + 3 < _MAXCOL and \
+                    cells[r][c].color == cells[r+1][c+1].color and \
+                    cells[r][c].color == cells[r+2][c+2].color and \
+                    cells[r][c].color == cells[r+3][c+3].color and \
+                    cells[r][c].color != "white":
+                    return True
         return False
 
     def __CheckDiag2():
+        for r in range(0, _MAXROW):
+            for c in range(0, _MAXCOL):
+                if r + 3 < _MAXROW and c - 3 > 0 and \
+                    cells[r][c].color == cells[r+1][c-1].color and \
+                    cells[r][c].color == cells[r+2][c-2].color and \
+                    cells[r][c].color == cells[r+3][c-3].color and \
+                    cells[r][c].color != "white":
+                    return True
         return False
 
-    def Check():
+    def Check(self):
         if (Cell.__CheckVertical() or Cell.__CheckHorizontal() or Cell.__CheckDiag1() or Cell.__CheckDiag2()):
             print(True)
-            return True
-        print(False)
-        return False
+            
 
 
-
+def reset(list):
+    list = [[Cell(frame1, r, c, width = 20, height = 20) for c in range(_MAXCOL)] for r in range(_MAXROW)]
 
 
 
@@ -70,11 +86,11 @@ frame1 = Frame(window)
 frame1.pack()
 frame2 = Frame(window)
 frame2.pack()
-botton = Button(frame2,text="새로 시작",width=10,height=2).grid(row=0,column=0)
+cells = [[Cell(frame1, r, c, width = 20, height = 20) for c in range(_MAXCOL)] for r in range(_MAXROW)]
+botton = Button(frame2,text="새로 시작",width=10,height=2).grid(row=0,column=0, command=reset(cells))
         
-cells = [Cell(frame1, i//_MAXCOL, i%_MAXCOL, width = 20, height = 20) for i in range(_MAXROW*_MAXCOL)]
-
 for cell in cells:
-    cell.grid(row = cell.row, column = cell.col)
+    for c in cell:
+        c.grid(row = c.row, column = c.col)
 
 window.mainloop() # Create an event loop
