@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import font
+from turtle import color
 from setuptools import Command
 
 _MAXROW = 6
@@ -27,9 +28,7 @@ class Cell(Canvas):
         self.create_oval(4, 4, 20, 20, fill = self.color, tags="oval")
 
     def setbg(self, bg):
-        self.delete("oval")
-        self.bg = bg
-        self.create_oval(4, 4, 20, 20, fill = self.color, tags="oval")
+        self.configure(background=bg)
 
     def clicked(self,event): # red 또는 yellow 돌 놓기.
         if ((((self.row!=_MAXROW-1) and cells[(self.row+1)][self.col].color!="white") or self.row==_MAXROW-1) and self.color == "white") and fin==False:
@@ -41,12 +40,17 @@ class Cell(Canvas):
             
     
     def __CheckVertical():
+        global Turn
         for r in range(0, _MAXROW):
             for c in range(0, _MAXCOL - 3):
                 if cells[r][c].color == cells[r][c+1].color and \
                     cells[r][c].color == cells[r][c+2].color and \
                     cells[r][c].color == cells[r][c+3].color and \
                     cells[r][c].color != "white":
+                    cells[r][c].setbg(Turn)
+                    cells[r][c+1].setbg(Turn)
+                    cells[r][c+2].setbg(Turn)
+                    cells[r][c+3].setbg(Turn)
                     return True
         return False
 
@@ -57,6 +61,10 @@ class Cell(Canvas):
                     cells[r][c].color == cells[r+2][c].color and \
                     cells[r][c].color == cells[r+3][c].color and \
                     cells[r][c].color != "white":
+                    cells[r][c].setbg(Turn)
+                    cells[r+1][c].setbg(Turn)
+                    cells[r+2][c].setbg(Turn)
+                    cells[r+3][c].setbg(Turn)
                     return True
         return False
 
@@ -69,7 +77,7 @@ class Cell(Canvas):
                     cells[r][c].color == cells[r+2][c+2].color and \
                     cells[r][c].color == cells[r+3][c+3].color and \
                     cells[r][c].color != "white":
-                    cells[r][c].setbg("white")
+                    cells[r][c].setbg(Turn)
                     cells[r+1][c+1].setbg(Turn)
                     cells[r+2][c+2].setbg(Turn)
                     cells[r+3][c+3].setbg(Turn)
@@ -85,7 +93,7 @@ class Cell(Canvas):
                     cells[r][c].color == cells[r+2][c-2].color and \
                     cells[r][c].color == cells[r+3][c-3].color and \
                     cells[r][c].color != "white":
-                    cells[r][c].setbg("white")
+                    cells[r][c].setbg(Turn)
                     cells[r+1][c-1].setbg(Turn)
                     cells[r+2][c-2].setbg(Turn)
                     cells[r+3][c-3].setbg(Turn)
@@ -102,18 +110,21 @@ class Cell(Canvas):
 
 def press():
     if (process_button['text'] == "새로 시작"):
-        global fin, Turn
-        fin=False
-        Turn = "red"
         reset()
     else:
         process_button.configure(text="새로 시작")
 
 def reset():
-
+    global fin, Turn
+    fin=False
+    Turn = "red"
     for r in range(_MAXROW):
         for c in range(_MAXCOL):
             cells[r][c].setColor("white")
+            cells[r][c].setbg("blue")
+
+            
+            
             
     
 
