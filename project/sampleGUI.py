@@ -15,17 +15,17 @@ def InitScreen():
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
 
     # 화면 전체 구도 잡기. 
-    frameTitle = Frame(g_Tk, padx=10, pady=10, bg='#ff0000')
+    frameTitle = Frame(g_Tk, padx=10, pady=10, bg='#fbffdc')
     frameTitle.pack(side="top", fill="x")
-    frameCombo = Frame(g_Tk, pady=10, bg='#00ff00')
+    frameCombo = Frame(g_Tk, pady=10, bg='#fbffdc')
     frameCombo.pack(side="top", fill="x")
-    frameEntry = Frame(g_Tk, pady=10, bg='#0000ff')
+    frameEntry = Frame(g_Tk, pady=10, bg='#fbffdc')
     frameEntry.pack(side="top", fill="x")
-    frameList = Frame(g_Tk, padx=10, pady=10, bg='#ffff00')
+    frameList = Frame(g_Tk, padx=10, pady=10, bg='#fbffdc')
     frameList.pack(side="bottom", fill="both", expand=True)
 
     # title 부분
-    MainText = Label(frameTitle, font = fontTitle, text="[서울시 근린시설 App]")
+    MainText = Label(frameTitle, font = fontTitle, text="학교종이 땡땡땡")
     MainText.pack(anchor="center", fill="both")
 
     # 종류 선택 부분
@@ -58,7 +58,7 @@ def InitScreen():
     LBScrollbar = Scrollbar(frameList)
     listBox = Listbox(frameList, selectmode='extended',\
         font=fontNormal, width=10, height=15, \
-        borderwidth=12, relief='ridge', yscrollcommand=LBScrollbar.set, bg='#ffa640',selectbackground='#fa8341')
+        borderwidth=12, relief='ridge', yscrollcommand=LBScrollbar.set, bg='#eeffe6',selectbackground='#7ea26c')
     listBox.bind('<<ListboxSelect>>', event_for_listbox)
     listBox.pack(side='left', anchor='n', expand=True, fill="x")
     
