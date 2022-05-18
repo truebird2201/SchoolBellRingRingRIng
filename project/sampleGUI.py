@@ -4,7 +4,7 @@ from tkinter import ttk
 from xml.etree import ElementTree
 
 g_Tk = Tk()
-
+img = PhotoImage(file = "image/Title.gif")
 
 def event_for_listbox(event): # 리스트 선택 시 내용 출력
     selection = event.widget.curselection()
@@ -31,9 +31,8 @@ def InitScreen():
     frameResult.pack(side="bottom", fill="both", expand=True)
 
     # title 부분
-    img = PhotoImage(file='image/Title.gif')
-    titleimg = Label(frameTitle,image=img,padx=10, pady=10,bg='#fffbd2',text="초등학교")
-    titleimg.pack(fill="both",expand=True, anchor = "center")
+    titleimg = Label(frameTitle,image=img)
+    titleimg.pack()
 
     # 종류 선택 부분
     radioValue = IntVar()
