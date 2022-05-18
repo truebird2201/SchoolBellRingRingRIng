@@ -1,5 +1,8 @@
 from tkinter import *
 from tkinter import font
+from tkinter import ttk
+from xml.etree import ElementTree
+
 g_Tk = Tk()
 # g_Tk.geometry("400x600+450+100") # {width}x{height}+-{xpos}+-{ypos}
 
@@ -62,8 +65,13 @@ def InitScreen():
     SearchButton.pack(side="right", padx=10, expand=True, fill='y')
 
     # 버튼 3개
-    SearchButton = Button(framebotton, font = fontNormal, text="지역")
-    SearchButton.pack(side="left", padx=10, expand=True, fill='y')
+    global LocalCombo
+    Local_str = ['모두']
+    Local_List_add(Local_str)
+    LocalCombo = ttk.Combobox(framebotton, values = Local_str)
+    LocalCombo.pack(side="left", expand=True, fill='y')
+    LocalCombo.set("모두")
+    
     SearchButton = Button(framebotton, font = fontNormal, text="북마크")
     SearchButton.pack(side="left", padx=10, expand=True, fill='y')
     SearchButton = Button(framebotton, font = fontNormal, text="지도")
@@ -105,9 +113,7 @@ def getStr(s):
     return '' if not s else s
 
 def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
-    from xml.etree import ElementTree 
-    
-    global listBox
+    global listBox, LocalCombo
     listBox.delete(0,listBox.size()) 
     School_text = ""
     if chk == 0:
@@ -129,8 +135,13 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
         i = 1
         for item in elements: # " row“ element들
             part_el = item.find('SIGUN_NM')
+            part_el2 = item.find('FACLT_NM')
             SCHOOL_DIV = item.find('SCHOOL_DIV_NM')
-            if InputLabel.get() not in part_el.text or School_text not in SCHOOL_DIV.text: 
+            # if InputLabel.get() not in part_el.text or School_text not in SCHOOL_DIV.text: 
+            #     continue 
+           
+            if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text or School_text not in SCHOOL_DIV.text \
+                or InputLabel.get() not in part_el2.text: 
                 continue 
         
             _text = '[' + str(i) + '] ' + \
@@ -148,7 +159,10 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
         i = 1
         for item in elements: # " row“ element들
             part_el = item.find('SIGUN_NM')
-            if InputLabel.get() not in part_el.text: 
+            part_el2 = item.find('FACLT_NM')
+
+            if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
+                or InputLabel.get() not in part_el2.text: 
                 continue 
         
             _text = '[' + str(i) + '] ' + \
@@ -157,7 +171,33 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
             listBox.insert(i-1, _text)
             i = i+1
 
+def Local_List_add(locallist):
+    with open('project/xml/초중고등학교현황.xml', 'rb') as f: 
+        strXml = f.read().decode('utf-8')
+    parseData = ElementTree.fromstring(strXml) 
+        
+    elements = parseData.iter('row')
 
+
+    for item in elements: # " row“ element들
+        part_el = item.find('SIGUN_NM')
+        if part_el.text in locallist: 
+            continue 
+        locallist.append(part_el.text)
+
+    with open('project/xml/전문및대학교현황.xml', 'rb') as f: 
+        strXml = f.read().decode('utf-8')
+    parseData = ElementTree.fromstring(strXml) 
+        
+    elements = parseData.iter('row')
+            
+    for item in elements: # " row“ element들
+        part_el = item.find('SIGUN_NM')
+        if part_el.text in locallist: 
+            continue 
+        locallist.append(part_el.text)
+    
+    
 
 InitScreen()
 g_Tk.mainloop()
