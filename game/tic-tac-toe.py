@@ -3,7 +3,7 @@ from tkinter import font
 
 class TicTacToe:
     window = Tk()
-    img_empty = PhotoImage(file = "image/empty.gif").zoom(3)
+    img_empty = PhotoImage(file = "image/Title.gif").zoom(3)
     img_O = PhotoImage(file = "image/o.gif").zoom(3)
     img_X = PhotoImage(file = "image/x.gif").zoom(3)
 

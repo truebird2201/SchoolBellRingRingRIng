@@ -4,7 +4,6 @@ from tkinter import ttk
 from xml.etree import ElementTree
 
 g_Tk = Tk()
-# g_Tk.geometry("400x600+450+100") # {width}x{height}+-{xpos}+-{ypos}
 
 
 def event_for_listbox(event): # 리스트 선택 시 내용 출력
@@ -20,20 +19,21 @@ def InitScreen():
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
 
     # 화면 전체 구도 잡기. 
-    frameTitle = Frame(g_Tk, padx=10, pady=10, bg='#ff0000')
+    frameTitle = Frame(g_Tk, padx=10, pady=10, bg='#fffbd2')
     frameTitle.pack(side="top", fill="x")
-    frameCombo = Frame(g_Tk, pady=10, bg='#00ff00')
+    frameCombo = Frame(g_Tk, pady=10, bg='#fffbd2')
     frameCombo.pack()
-    frameEntry = Frame(g_Tk, pady=10, bg='#0000ff')
+    frameEntry = Frame(g_Tk, pady=10, bg='#fffbd2')
     frameEntry.pack(side="top", fill="x")
-    framebotton = Frame(g_Tk, padx=10, pady=10, bg='#0ff0f0')
+    framebotton = Frame(g_Tk, padx=10, pady=10, bg='#fffbd2')
     framebotton.pack(side="top", fill="both", expand=True)
-    frameResult = Frame(g_Tk, padx=10, pady=10, bg='#ffff00')
+    frameResult = Frame(g_Tk, padx=10, pady=10, bg='#fffbd2')
     frameResult.pack(side="bottom", fill="both", expand=True)
 
     # title 부분
-    MainText = Label(frameTitle, font = fontTitle, text="학교종이 땡땡땡")
-    MainText.pack(anchor="center", fill="both")
+    img = PhotoImage(file='image/Title.gif')
+    titleimg = Label(frameTitle,image=img,padx=10, pady=10,bg='#fffbd2',text="초등학교")
+    titleimg.pack(fill="both",expand=True, anchor = "center")
 
     # 종류 선택 부분
     radioValue = IntVar()
@@ -51,9 +51,6 @@ def InitScreen():
     r4 = Radiobutton(frameCombo, font=fontNormal, value=3, variable=radioValue, text="대학교/대학원", command=lambda:CheckRadio(3)) 
     r4.pack(side='left',expand=True, fill="both")
     
-    
-    sendEmailButton = Button(frameCombo, font = fontNormal, text='이메일') 
-    sendEmailButton.pack(side='right', padx=10, fill='y')
 
     # 사용자 입력 부분
     global InputLabel
@@ -65,11 +62,6 @@ def InitScreen():
     SearchButton.pack(side="right", padx=10, expand=True, fill='y')
 
     # 버튼 3개
-<<<<<<< HEAD
-    SearchButton = Button(framebotton, font = fontNormal, text="지역")
-    SearchButton.pack(side="left", padx=10, expand=True, fill='y')
-    SearchButton = Button(framebotton, font = fontNormal, text="북마크", command=OnBookMark)
-=======
     global LocalCombo
     Local_str = ['모두']
     Local_List_add(Local_str)
@@ -77,8 +69,7 @@ def InitScreen():
     LocalCombo.pack(side="left", expand=True, fill='y')
     LocalCombo.set("모두")
     
-    SearchButton = Button(framebotton, font = fontNormal, text="북마크")
->>>>>>> 2703a4e50bc41f2b2f9423d5d3d0bc084f63e00b
+    SearchButton = Button(framebotton, font = fontNormal, text="북마크",command=OnBookMark)
     SearchButton.pack(side="left", padx=10, expand=True, fill='y')
     SearchButton = Button(framebotton, font = fontNormal, text="지도")
     SearchButton.pack(side="left", padx=10, expand=True, fill='y')
@@ -149,7 +140,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
         School_text = "대학"
 
     if not chk == 3:
-        with open('project/xml/초중고등학교현황.xml', 'rb') as f: 
+        with open('xml/초중고등학교현황.xml', 'rb') as f: 
             strXml = f.read().decode('utf-8')
         parseData = ElementTree.fromstring(strXml) 
         
@@ -173,7 +164,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
             listBox.insert(i-1, _text)
             i = i+1
     else:
-        with open('project/xml/전문및대학교현황.xml', 'rb') as f: 
+        with open('xml/전문및대학교현황.xml', 'rb') as f: 
             strXml = f.read().decode('utf-8')
         parseData = ElementTree.fromstring(strXml) 
         
@@ -195,7 +186,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
             i = i+1
 
 def Local_List_add(locallist):
-    with open('project/xml/초중고등학교현황.xml', 'rb') as f: 
+    with open('xml/초중고등학교현황.xml', 'rb') as f: 
         strXml = f.read().decode('utf-8')
     parseData = ElementTree.fromstring(strXml) 
         
@@ -208,7 +199,7 @@ def Local_List_add(locallist):
             continue 
         locallist.append(part_el.text)
 
-    with open('project/xml/전문및대학교현황.xml', 'rb') as f: 
+    with open('xml/전문및대학교현황.xml', 'rb') as f: 
         strXml = f.read().decode('utf-8')
     parseData = ElementTree.fromstring(strXml) 
         
