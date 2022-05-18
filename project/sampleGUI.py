@@ -64,7 +64,7 @@ def InitScreen():
     # 버튼 3개
     SearchButton = Button(framebotton, font = fontNormal, text="지역")
     SearchButton.pack(side="left", padx=10, expand=True, fill='y')
-    SearchButton = Button(framebotton, font = fontNormal, text="북마크")
+    SearchButton = Button(framebotton, font = fontNormal, text="북마크", command=OnBookMark)
     SearchButton.pack(side="left", padx=10, expand=True, fill='y')
     SearchButton = Button(framebotton, font = fontNormal, text="지도")
     SearchButton.pack(side="left", padx=10, expand=True, fill='y')
@@ -100,6 +100,23 @@ def onSearch(): # "검색" 버튼 이벤트처리
         SearchLibrary(rcheck) 
     elif rcheck == 3:
         SearchLibrary(rcheck) 
+
+def OnBookMark():              # 북마크 팝업
+    global g_Tk
+    fontNormal = font.Font(g_Tk, size=15, weight='bold')
+    bm=Toplevel(g_Tk)
+    bm.title("북마크")
+    bmframe = Frame(bm, padx=10, pady=10, bg='White')
+    bmframe.pack(side="bottom", fill="both")
+    bmLBScrollbar = Scrollbar(bmframe)
+    bmlistBox = Listbox(bmframe, selectmode='extended',\
+        font=fontNormal, width=20, height=15, \
+        borderwidth=12, relief='ridge', yscrollcommand=bmLBScrollbar.set, bg='#ffa640',selectbackground='#fa8341')
+    bmlistBox.bind('<<ListboxSelect>>', event_for_listbox)
+    bmlistBox.pack(anchor='n', expand=False, fill="x")
+    
+    bmLBScrollbar.pack(side='right',fill='y')
+    bmLBScrollbar.config(command=listBox.yview)
 
 def getStr(s): 
     return '' if not s else s
