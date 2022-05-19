@@ -4,6 +4,7 @@ from tkinter import ttk
 from xml.etree import ElementTree
 
 g_Tk = Tk()
+g_Tk.title("학교종이 땡땡땡")
 img = PhotoImage(file='image/Title.png')
 img1 = PhotoImage(file='image/Search.png')
 img2 = PhotoImage(file='image/BookMark.png')
@@ -82,8 +83,8 @@ def InitScreen():
     # 목록 부분
     global listBox
     LBScrollbar = Scrollbar(frameResult)
-    listBox = Listbox(frameResult, selectmode='extended',fg ='#ff7b9e',selectforeground='White',selectbackground = "#ff7b9e",
-        font=fontNormal, width=20, height=15, bg= '#fff0f6',\
+    listBox = Listbox(frameResult, selectmode='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
+        font=fontNormal, width=20, height=15, bg= 'White',\
         borderwidth=2, relief='ridge', yscrollcommand=LBScrollbar.set)
     listBox.bind('<<ListboxSelect>>', event_for_listbox)
     listBox.pack(side='left', anchor='n', expand=False, fill="x")
@@ -116,12 +117,12 @@ def OnBookMark():              # 북마크 팝업
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
     bm=Toplevel(g_Tk)
     bm.title("북마크")
-    bmframe = Frame(bm, padx=10, pady=10, bg='White')
+    bmframe = Frame(bm, bg='#d6f2ff',padx=10, pady=10)
     bmframe.pack(side="bottom", fill="both")
     bmLBScrollbar = Scrollbar(bmframe)
-    bmlistBox = Listbox(bmframe, selectmode='extended',\
-        font=fontNormal, width=20, height=15, \
-        borderwidth=12, relief='ridge', yscrollcommand=bmLBScrollbar.set, bg='#ffa640',selectbackground='#fa8341')
+    bmlistBox = Listbox(bmframe, selectmode ='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
+        font=fontNormal, width=20, height=15, bg= 'White',\
+        borderwidth=2, relief='ridge', yscrollcommand=bmLBScrollbar.set)
     bmlistBox.bind('<<ListboxSelect>>', event_for_listbox)
     bmlistBox.pack(anchor='n', expand=False, fill="x")
     
