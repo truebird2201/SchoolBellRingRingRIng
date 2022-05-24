@@ -206,15 +206,42 @@ def SendMail():
 def OnMap():              # 지도 팝업
     global g_Tk
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
-    mp=Toplevel(g_Tk)
-    mp.title("지도")
-    mpframe = Frame(mp, bg='#d6f2ff',padx=10, pady=10)
-    mpframe.pack(side="bottom", fill="both")
+    map=Toplevel(g_Tk)
+    map.title("지도")
+
+    searchframe = Frame(map, bg='#c7ffa6',padx=10, pady=10)
+    searchframe.pack(side="top", fill="both")
+    mapframe = Frame(map, bg='#d6f2ff',padx=10, pady=10)
+    mapframe.pack(side="top", fill="both")
+
+    global InputLabel_Map
+    InputLabel_Map = Entry(searchframe, fg ='#6cce32',selectbackground = "#dcffc8",bg='White',
+    insertbackground = '#487c2a',selectforeground='#487c2a',font = fontNormal,width = 30, borderwidth = 5, relief = 'sunken')
+    InputLabel_Map.pack(side="left", padx=10, expand=True, fill='x')
+
+    SearchButton_Map = Button(searchframe, font = fontNormal, \
+    text="검색", command=onSearch_Map,image=img1,)
+    SearchButton_Map.pack(side="right")
+
+    global marker_1, map_widget
+    map_widget = tkintermapview.TkinterMapView(mapframe, 
+    width=800, height=500, corner_radius=0) 
+    map_widget.pack()
+
+    # marker_1 = map_widget.set_position(37.8599522344, 127.5144681238, marker=True)# 위도,경도 위치지정
+    # 주소 위치지정 
+    marker_1 = map_widget.set_address("경기도 시흥시 산기대학로 237", marker=True)
+    # print(marker_1.position, marker_1.text) # get position and text 
+    marker_1.set_text("한국공학대학교") # set new text 
+    map_widget.set_zoom(13) # 0~19 (19 is the highest zoom level)
+
+def onSearch_Map():
+    SearchLibrary(4, True)
 
 def getStr(s): 
     return '' if not s else s
 
-def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
+def SearchLibrary(chk, onMap=False): # "검색" 버튼 -> "도서관"
     global listBox, LocalCombo
     gplist = [0,0,0,0]
     listBox.delete(0,listBox.size()) 
@@ -230,51 +257,90 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
     else:
         School_text = "모두"
     if chk == 4:
+        if onMap:
+            with open('xml/초중고등학교현황.xml', 'rb') as f: 
+                strXml = f.read().decode('utf-8')
+                parseData = ElementTree.fromstring(strXml) 
+                
+                elements = parseData.iter('row')
+                    
+                for item in elements: # " row“ element들
+                    part_el = item.find('SIGUN_NM')
+                    part_el2 = item.find('FACLT_NM')
 
-        with open('xml/초중고등학교현황.xml', 'rb') as f: 
-            strXml = f.read().decode('utf-8')
-            parseData = ElementTree.fromstring(strXml) 
+                    if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
+                        or InputLabel_Map.get() not in part_el2.text: 
+                        continue
 
-            elements = parseData.iter('row')
+                    marker_1 = map_widget.set_position(float(item.find('REFINE_WGS84_LAT').text),
+                    float(item.find('REFINE_WGS84_LOGT').text), marker=True)
+                    marker_1.set_text(part_el2.text) # set new text
+                    map_widget.set_zoom(13) # 0~19 (19 is the highest zoom level)
+            
+            with open('xml/전문및대학교현황.xml', 'rb') as f: 
+                strXml = f.read().decode('utf-8')
+                parseData = ElementTree.fromstring(strXml) 
+                
+                elements = parseData.iter('row')
+                    
+                for item in elements: # " row“ element들
+                    part_el = item.find('SIGUN_NM')
+                    part_el2 = item.find('FACLT_NM')
 
-            i = 1
-            for item in elements: # " row“ element들
-                part_el = item.find('SIGUN_NM')
-                part_el2 = item.find('FACLT_NM')
-                SCHOOL_DIV = item.find('SCHOOL_DIV_NM')
+                    if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
+                        or InputLabel_Map.get() not in part_el2.text: 
+                        continue
+                    
+                    marker_1 = map_widget.set_position(float(item.find('REFINE_WGS84_LAT').text),
+                    float(item.find('REFINE_WGS84_LOGT').text), marker=True)
+                    marker_1.set_text(part_el2.text) # set new text 
+                    map_widget.set_zoom(13) # 0~19 (19 is the highest zoom level)
 
-                if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
-                    or InputLabel.get() not in part_el2.text: 
-                    continue 
+        else:
+            with open('xml/초중고등학교현황.xml', 'rb') as f: 
+                strXml = f.read().decode('utf-8')
+                parseData = ElementTree.fromstring(strXml) 
 
-                _text = '[' + str(i) + '] ' + \
-                    getStr(item.find('FACLT_NM').text)
-                listBox.insert(i-1, _text)
-                i = i+1
-                if ("초등학교" in SCHOOL_DIV.text): gplist[0]+=1
-                elif ("중학교" in SCHOOL_DIV.text): gplist[1]+=1
-                else : gplist[2]+=1
+                elements = parseData.iter('row')
 
-        with open('xml/전문및대학교현황.xml', 'rb') as f: 
-            strXml = f.read().decode('utf-8')
-            parseData = ElementTree.fromstring(strXml) 
+                i = 1
+                for item in elements: # " row“ element들
+                    part_el = item.find('SIGUN_NM')
+                    part_el2 = item.find('FACLT_NM')
+                    SCHOOL_DIV = item.find('SCHOOL_DIV_NM')
 
-            elements = parseData.iter('row')
+                    if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
+                        or InputLabel.get() not in part_el2.text: 
+                        continue 
 
-            i = 1
-            for item in elements: # " row“ element들
-                part_el = item.find('SIGUN_NM')
-                part_el2 = item.find('FACLT_NM') 
+                    _text = '[' + str(i) + '] ' + \
+                        getStr(item.find('FACLT_NM').text)
+                    listBox.insert(i-1, _text)
+                    i = i+1
+                    if ("초등학교" in SCHOOL_DIV.text): gplist[0]+=1
+                    elif ("중학교" in SCHOOL_DIV.text): gplist[1]+=1
+                    else : gplist[2]+=1
 
-                if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
-                    or InputLabel.get() not in part_el2.text: 
-                    continue 
+            with open('xml/전문및대학교현황.xml', 'rb') as f: 
+                strXml = f.read().decode('utf-8')
+                parseData = ElementTree.fromstring(strXml) 
 
-                _text = '[' + str(i) + '] ' + \
-                    getStr(item.find('FACLT_NM').text)
-                listBox.insert(i-1, _text)
-                i = i+1
-                gplist[3]+=1
+                elements = parseData.iter('row')
+
+                i = 1
+                for item in elements: # " row“ element들
+                    part_el = item.find('SIGUN_NM')
+                    part_el2 = item.find('FACLT_NM') 
+
+                    if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
+                        or InputLabel.get() not in part_el2.text: 
+                        continue 
+
+                    _text = '[' + str(i) + '] ' + \
+                        getStr(item.find('FACLT_NM').text)
+                    listBox.insert(i-1, _text)
+                    i = i+1
+                    gplist[3]+=1
 
     else:
         if not chk == 3:
