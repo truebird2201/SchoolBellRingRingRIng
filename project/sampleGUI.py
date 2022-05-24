@@ -16,7 +16,7 @@ def event_for_listbox(event): # 리스트 선택 시 내용 출력
     if selection:
         index = selection[0]
         data = event.widget.get(index)
-        print(data)
+        OnSchool(data)
 
 
 def InitScreen(): 
@@ -151,28 +151,50 @@ def OnBookMark():              # 북마크 팝업
     bmlistBox = Listbox(bmframe, selectmode ='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
         font=fontNormal, width=20, height=15, bg= 'White',\
         borderwidth=2, relief='ridge', yscrollcommand=bmLBScrollbar.set)
-    bmlistBox.bind('<<ListboxSelect>>', event_for_listbox)
+    bmlistBox.bind()
     bmlistBox.pack(side='left', anchor='n', expand=False, fill="x")
 
     bmLBScrollbar.pack(side='left',fill='y')
     bmLBScrollbar.config(command=listBox.yview)
 
+def OnSchool(name):              # 학교 팝업
+    global g_Tk
+    fontNormal = font.Font(g_Tk, size=15, weight='bold')
+    fontTitle = font.Font(g_Tk, size=25, weight='bold',family = "나눔고딕")
+    sc=Toplevel(g_Tk)
+    sc.title(name)
+
+    # 화면 전체 구도 잡기. 
+    frameTitle = Frame(sc, bg='#fffbd2')
+    frameTitle.pack(side="top", fill="x")
+
+    titleimg = Label(frameTitle,font = fontTitle, bg='#fffbd2',text="초등학교")
+    titleimg.pack(fill="both",expand=True, anchor = "w")
+
+    frameinfo = Frame(sc, pady=10, bg='#fffbd2')
+    frameinfo.pack()
+    framebotton = Frame(sc, pady=10, bg='#fffbd2')
+    framebotton.pack(side="bottom", fill="both", expand=True)
+
+    SearchButton = Button(framebotton, font = fontNormal,image=img3, text="지도", command=OnMap)
+    SearchButton.pack(side="left", padx=10, pady=5)
+    SearchButton = Button(framebotton, font = fontNormal,image=img2, text="북마크",command=OnBookMark)
+    SearchButton.pack(side="right", padx=10, pady=5)
+
+    infoBox = Listbox(frameinfo, selectmode='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
+        font=fontNormal,width=40, height=15, bg= 'White',\
+        borderwidth=2, relief='ridge')
+    infoBox.bind()
+    infoBox.pack(side='left', anchor='n', padx=10, expand=False, fill="x")
+
+
 def OnMap():              # 지도 팝업
     global g_Tk
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
-    bm=Toplevel(g_Tk)
-    bm.title("북마크")
-    bmframe = Frame(bm, bg='#d6f2ff',padx=10, pady=10)
-    bmframe.pack(side="bottom", fill="both")
-    bmLBScrollbar = Scrollbar(bmframe)
-    bmlistBox = Listbox(bmframe, selectmode ='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
-        font=fontNormal, width=20, height=15, bg= 'White',\
-        borderwidth=2, relief='ridge', yscrollcommand=bmLBScrollbar.set)
-    bmlistBox.bind('<<ListboxSelect>>', event_for_listbox)
-    bmlistBox.pack(anchor='n', expand=False, fill="x")
-    
-    bmLBScrollbar.pack(side='right',fill='y')
-    bmLBScrollbar.config(command=listBox.yview)
+    mp=Toplevel(g_Tk)
+    mp.title("지도")
+    mpframe = Frame(mp, bg='#d6f2ff',padx=10, pady=10)
+    mpframe.pack(side="bottom", fill="both")
 
 def getStr(s): 
     return '' if not s else s
