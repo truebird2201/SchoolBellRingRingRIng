@@ -4,8 +4,10 @@ from tkinter import ttk
 from xml.etree import ElementTree
 
 g_Tk = Tk()
-img = PhotoImage(file = "image/Title.gif")
-
+img = PhotoImage(file='image/Title.png')
+img1 = PhotoImage(file='image/Search.png')
+img2 = PhotoImage(file='image/BookMark.png')
+img3 = PhotoImage(file='image/map.png')
 def event_for_listbox(event): # 리스트 선택 시 내용 출력
     selection = event.widget.curselection()
     if selection:
@@ -17,68 +19,72 @@ def event_for_listbox(event): # 리스트 선택 시 내용 출력
 def InitScreen(): 
     fontTitle = font.Font(g_Tk, size=18, weight='bold', family = '나눔고딕')
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
+    fontin = font.Font(g_Tk, size=13, weight='bold')
 
     # 화면 전체 구도 잡기. 
-    frameTitle = Frame(g_Tk, padx=10, pady=10, bg='#fffbd2')
+    frameTitle = Frame(g_Tk, bg='#fffbd2')
     frameTitle.pack(side="top", fill="x")
     frameCombo = Frame(g_Tk, pady=10, bg='#fffbd2')
     frameCombo.pack()
     frameEntry = Frame(g_Tk, pady=10, bg='#fffbd2')
     frameEntry.pack(side="top", fill="x")
-    framebotton = Frame(g_Tk, padx=10, pady=10, bg='#fffbd2')
+    framebotton = Frame(g_Tk, pady=10, bg='#fffbd2')
     framebotton.pack(side="top", fill="both", expand=True)
     frameResult = Frame(g_Tk, padx=10, pady=10, bg='#fffbd2')
     frameResult.pack(side="bottom", fill="both", expand=True)
 
     # title 부분
-    titleimg = Label(frameTitle,image=img)
-    titleimg.pack()
+    titleimg = Label(frameTitle,image=img,bg='#fffbd2',text="초등학교")
+    titleimg.pack(fill="both",expand=True, anchor = "center")
+
 
     # 종류 선택 부분
     radioValue = IntVar()
     global rcheck
     rcheck = 0
-    r1 = Radiobutton(frameCombo, font=fontNormal, value=0, variable=radioValue, text="초등학교", command=lambda:CheckRadio(0)) 
+    r1 = Radiobutton(frameCombo, font=fontNormal, value=0, variable=radioValue, text="초등학교", command=lambda:CheckRadio(0), bg='#fff0f6') 
     r1.pack(side='left',expand=True, fill="both")
     
-    r2 = Radiobutton(frameCombo, font=fontNormal, value=1, variable=radioValue, text="중학교", command=lambda:CheckRadio(1)) 
+    r2 = Radiobutton(frameCombo, font=fontNormal, value=1, variable=radioValue, text="중학교", command=lambda:CheckRadio(1), bg='#fff0f6') 
     r2.pack(side='left',expand=True, fill="both")
 
-    r3 = Radiobutton(frameCombo, font=fontNormal, value=2, variable=radioValue, text="고등학교", command=lambda:CheckRadio(2)) 
+    r3 = Radiobutton(frameCombo, font=fontNormal, value=2, variable=radioValue, text="고등학교", command=lambda:CheckRadio(2), bg='#fff0f6') 
     r3.pack(side='left',expand=True, fill="both")
 
-    r4 = Radiobutton(frameCombo, font=fontNormal, value=3, variable=radioValue, text="대학교/대학원", command=lambda:CheckRadio(3)) 
+    r4 = Radiobutton(frameCombo, font=fontNormal, value=3, variable=radioValue, text="대학교/대학원", command=lambda:CheckRadio(3), bg='#fff0f6') 
     r4.pack(side='left',expand=True, fill="both")
     
 
     # 사용자 입력 부분
     global InputLabel
-    InputLabel = Entry(frameEntry, font = fontNormal,width = 26, borderwidth = 12, relief = 'ridge')
+    InputLabel = Entry(frameEntry, fg ='#ffaa00',selectbackground = "#ff6010",bg='White',
+    insertbackground = '#ff6010',font = fontNormal,width = 30, borderwidth = 5, relief = 'sunken')
     InputLabel.pack(side="left", padx=10, expand=True)
 
     SearchButton = Button(frameEntry, font = fontNormal, \
-    text="검색", command=onSearch)
-    SearchButton.pack(side="right", padx=10, expand=True, fill='y')
+    text="검색", command=onSearch,image=img1,)
+    SearchButton.pack(side="right", expand=True)
 
     # 버튼 3개
     global LocalCombo
     Local_str = ['모두']
     Local_List_add(Local_str)
-    LocalCombo = ttk.Combobox(framebotton, values = Local_str)
-    LocalCombo.pack(side="left", expand=True, fill='y')
+    LocalCombo = ttk.Combobox(framebotton,justify = 'center',foreground="#ffaa00",font=fontin, values = Local_str)
+    LocalCombo.pack(side="left", padx=12,expand=True, fill='both')
     LocalCombo.set("모두")
     
-    SearchButton = Button(framebotton, font = fontNormal, text="북마크",command=OnBookMark)
-    SearchButton.pack(side="left", padx=10, expand=True, fill='y')
-    SearchButton = Button(framebotton, font = fontNormal, text="지도")
-    SearchButton.pack(side="left", padx=10, expand=True, fill='y')
+    SearchButton = Button(framebotton, font = fontNormal,image=img3,  width = 100,text="지도")
+    SearchButton.pack(side="right", padx=5, fill='both')
+    SearchButton = Button(framebotton, font = fontNormal,image=img2,  width = 100,text="북마크",command=OnBookMark)
+    SearchButton.pack(side="right", padx=5, fill='both')
+
 
     # 목록 부분
     global listBox
     LBScrollbar = Scrollbar(frameResult)
-    listBox = Listbox(frameResult, selectmode='extended',\
-        font=fontNormal, width=20, height=15, \
-        borderwidth=12, relief='ridge', yscrollcommand=LBScrollbar.set, bg='#ffa640',selectbackground='#fa8341')
+    listBox = Listbox(frameResult, selectmode='extended',fg ='#ff7b9e',selectforeground='White',selectbackground = "#ff7b9e",
+        font=fontNormal, width=20, height=15, bg= '#fff0f6',\
+        borderwidth=2, relief='ridge', yscrollcommand=LBScrollbar.set)
     listBox.bind('<<ListboxSelect>>', event_for_listbox)
     listBox.pack(side='left', anchor='n', expand=False, fill="x")
     
