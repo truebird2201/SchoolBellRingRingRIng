@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import font
 from tkinter import ttk
 from xml.etree import ElementTree
+import tkintermapview
 
 g_Tk = Tk()
 g_Tk.title("학교종이 땡땡땡")
@@ -9,6 +10,7 @@ img = PhotoImage(file='image/Title.png')
 img1 = PhotoImage(file='image/Search.png')
 img2 = PhotoImage(file='image/BookMark.png')
 img3 = PhotoImage(file='image/map.png')
+
 def event_for_listbox(event): # 리스트 선택 시 내용 출력
     selection = event.widget.curselection()
     if selection:
@@ -31,8 +33,10 @@ def InitScreen():
     frameEntry.pack(side="top", fill="x")
     framebotton = Frame(g_Tk, pady=10, bg='#fffbd2')
     framebotton.pack(side="top", fill="both", expand=True)
+    global frameResult
     frameResult = Frame(g_Tk, padx=10, pady=10, bg='#fffbd2')
     frameResult.pack(side="bottom", fill="both", expand=True)
+
 
     # title 부분
 
@@ -74,7 +78,7 @@ def InitScreen():
     LocalCombo.pack(side="left", padx=12,expand=True, fill='both')
     LocalCombo.set("모두")
     
-    SearchButton = Button(framebotton, font = fontNormal,image=img3,  width = 100,text="지도")
+    SearchButton = Button(framebotton, font = fontNormal,image=img3,  width = 100,text="지도", command=OnMap)
     SearchButton.pack(side="right", padx=5, fill='both')
     SearchButton = Button(framebotton, font = fontNormal,image=img2,  width = 100,text="북마크",command=OnBookMark)
     SearchButton.pack(side="right", padx=5, fill='both')
@@ -92,9 +96,35 @@ def InitScreen():
     LBScrollbar.pack(side="left", fill='y')
     LBScrollbar.config(command=listBox.yview)
 
-    #지도
-    pass
+    # 그래프
 
+def drawGraph(canvas,data,canvasWidth,canvasHeight):
+    canvas.delete('gp')
+    nData = len(data)
+    nMax = max(data)
+    nMin=min(data)
+
+    canvas.create_rectangle(0,0,canvasWidth,canvasHeight,fill='White',tag='gp')
+
+    if nMax==0:
+        nMax=1
+    
+    rectWidth = (canvasWidth//nData)
+    bottom = canvasHeight - 20
+    maxheight = canvasHeight - 40
+    for i in range(nData):
+        if nMax == data[i]:color="Red"
+        elif nMin == data[i]:color="Blue"
+        else:color="Grey"
+
+        curHeight = maxheight * data[i]/nMax
+        top = bottom - curHeight
+        left = i*rectWidth
+        right=(i+1)*rectWidth
+        canvas.create_rectangle(left,top,right,bottom,fill=color,tag='gp',activefill='Yellow')
+
+        canvas.create_text((left+right)//2,top-10,text=data[i],tags='gp')
+        canvas.create_text((left+right)//2,bottom+10,text=i+1,tags='gp')
 def CheckRadio(num):
     global rcheck
     rcheck = num
@@ -113,6 +143,25 @@ def onSearch(): # "검색" 버튼 이벤트처리
         SearchLibrary(rcheck) 
 
 def OnBookMark():              # 북마크 팝업
+    global g_Tk
+    fontNormal = font.Font(g_Tk, size=15, weight='bold')
+    bm=Toplevel(g_Tk)
+    bm.title("북마크")
+
+    bmframe = Frame(bm, bg='#d6f2ff',padx=10, pady=10)
+    bmframe.pack(side="bottom", fill="both")
+
+    bmLBScrollbar = Scrollbar(bmframe)
+    bmlistBox = Listbox(bmframe, selectmode ='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
+        font=fontNormal, width=20, height=15, bg= 'White',\
+        borderwidth=2, relief='ridge', yscrollcommand=bmLBScrollbar.set)
+    bmlistBox.bind('<<ListboxSelect>>', event_for_listbox)
+    bmlistBox.pack(side='left', anchor='n', expand=False, fill="x")
+
+    bmLBScrollbar.pack(side='left',fill='y')
+    bmLBScrollbar.config(command=listBox.yview)
+
+def OnMap():              # 지도 팝업
     global g_Tk
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
     bm=Toplevel(g_Tk)
@@ -190,6 +239,10 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                 ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
             listBox.insert(i-1, _text)
             i = i+1
+    
+    graph = Canvas(frameResult,bg='Red',width = 200)
+    graph.pack(side="right", fill='y')
+    drawGraph(graph, parseData, 210, 400)
 
 def Local_List_add(locallist):
     with open('xml/초중고등학교현황.xml', 'rb') as f: 
