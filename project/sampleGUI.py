@@ -21,7 +21,7 @@ def event_for_listbox(event): # 리스트 선택 시 내용 출력
 
 def InitScreen(): 
     fontTitle = font.Font(g_Tk, size=18, weight='bold', family = '나눔고딕')
-    fontNormal = font.Font(g_Tk, size=12, weight='bold')
+    fontNormal = font.Font(g_Tk, size=15, weight='bold')
     fontin = font.Font(g_Tk, size=13, weight='bold')
 
     # 화면 전체 구도 잡기. 
@@ -66,12 +66,12 @@ def InitScreen():
     # 사용자 입력 부분
     global InputLabel
     InputLabel = Entry(frameEntry, fg ='#ffaa00',selectbackground = "#ff6010",bg='White',
-    insertbackground = '#ff6010',font = fontNormal,width = 30, borderwidth = 5, relief = 'sunken')
-    InputLabel.pack(side="left", padx=10, expand=True)
+    insertbackground = '#ff6010',font = fontNormal,width = 37, borderwidth = 3, relief = 'sunken')
+    InputLabel.pack(side="left", padx=9, expand=True)
 
     SearchButton = Button(frameEntry, font = fontNormal, \
     text="검색", command=onSearch,image=img1,)
-    SearchButton.pack(side="right", expand=True)
+    SearchButton.pack(padx = 5,expand=True)
 
     # 버튼 3개
     global LocalCombo
@@ -91,7 +91,7 @@ def InitScreen():
     global listBox
     LBScrollbar = Scrollbar(frameResult)
     listBox = Listbox(frameResult, selectmode='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
-        font=fontNormal, width=20, height=15, bg= 'White',\
+        font=fontNormal, width=25, height=15, bg= 'White',\
         borderwidth=2, relief='ridge', yscrollcommand=LBScrollbar.set)
     listBox.bind('<<ListboxSelect>>', event_for_listbox)
     listBox.pack(side='left', anchor='n', expand=False, fill="x")
@@ -289,7 +289,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
 
     graph = Canvas(frameResult,bg='Red',width = 200)
     graph.delete('gp')
-    graph.place(x=255,y=0 ,width=200,height=380,anchor= "nw")
+    graph.place(x=310,y=0 ,width=210,height=380,anchor= "nw")
     drawGraph(graph, gplist, 210, 400)
 
 def Local_List_add(locallist):
