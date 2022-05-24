@@ -21,7 +21,7 @@ def event_for_listbox(event): # 리스트 선택 시 내용 출력
 
 def InitScreen(): 
     fontTitle = font.Font(g_Tk, size=18, weight='bold', family = '나눔고딕')
-    fontNormal = font.Font(g_Tk, size=15, weight='bold')
+    fontNormal = font.Font(g_Tk, size=12, weight='bold')
     fontin = font.Font(g_Tk, size=13, weight='bold')
 
     # 화면 전체 구도 잡기. 
@@ -58,6 +58,9 @@ def InitScreen():
 
     r4 = Radiobutton(frameCombo, font=fontNormal, value=3, variable=radioValue, text="대학교/대학원", command=lambda:CheckRadio(3), bg='#fff0f6') 
     r4.pack(side='left',expand=True, fill="both")
+
+    r5 = Radiobutton(frameCombo, font=fontNormal, value=4, variable=radioValue, text="모두", command=lambda:CheckRadio(4), bg='#fff0f6') 
+    r5.pack(side='left',expand=True, fill="both")
     
 
     # 사용자 입력 부분
@@ -133,15 +136,7 @@ def CheckRadio(num):
 
 def onSearch(): # "검색" 버튼 이벤트처리
     global rcheck
-    print(rcheck)
-    if rcheck == 0:
-        SearchLibrary(rcheck)
-    elif rcheck == 1:
-        SearchLibrary(rcheck) 
-    elif rcheck == 2:
-        SearchLibrary(rcheck) 
-    elif rcheck == 3:
-        SearchLibrary(rcheck) 
+    SearchLibrary(rcheck) 
 
 def OnBookMark():              # 북마크 팝업
     global g_Tk
@@ -193,58 +188,104 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
         School_text = "중학교"
     elif chk == 2:
         School_text = "고등학교"
-    else:
+    elif chk == 3:
         School_text = "대학"
+    else:
+        School_text = "모두"
+    if chk == 4:
 
-    if not chk == 3:
         with open('xml/초중고등학교현황.xml', 'rb') as f: 
             strXml = f.read().decode('utf-8')
-        parseData = ElementTree.fromstring(strXml) 
-        
-        elements = parseData.iter('row')
-            
-        i = 1
-        for item in elements: # " row“ element들
-            part_el = item.find('SIGUN_NM')
-            part_el2 = item.find('FACLT_NM')
-            SCHOOL_DIV = item.find('SCHOOL_DIV_NM')
-            # if InputLabel.get() not in part_el.text or School_text not in SCHOOL_DIV.text: 
-            #     continue 
-           
-            if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text or School_text not in SCHOOL_DIV.text \
-                or InputLabel.get() not in part_el2.text: 
-                continue 
-        
-            _text = '[' + str(i) + '] ' + \
-                getStr(item.find('FACLT_NM').text) + \
-                ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
-            listBox.insert(i-1, _text)
-            i = i+1
-            if ("초등학교" in SCHOOL_DIV.text): gplist[0]+=1
-            elif ("중학교" in SCHOOL_DIV.text): gplist[1]+=1
-            else : gplist[2]+=1
-    else:
+            parseData = ElementTree.fromstring(strXml) 
+
+            elements = parseData.iter('row')
+
+            i = 1
+            for item in elements: # " row“ element들
+                part_el = item.find('SIGUN_NM')
+                part_el2 = item.find('FACLT_NM')
+
+                if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
+                    or InputLabel.get() not in part_el2.text: 
+                    continue 
+
+                _text = '[' + str(i) + '] ' + \
+                    getStr(item.find('FACLT_NM').text) + \
+                    ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+                listBox.insert(i-1, _text)
+                i = i+1
+
         with open('xml/전문및대학교현황.xml', 'rb') as f: 
             strXml = f.read().decode('utf-8')
-        parseData = ElementTree.fromstring(strXml) 
-        
-        elements = parseData.iter('row')
+            parseData = ElementTree.fromstring(strXml) 
 
-        i = 1
-        for item in elements: # " row“ element들
-            part_el = item.find('SIGUN_NM')
-            part_el2 = item.find('FACLT_NM')
+            elements = parseData.iter('row')
 
-            if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
-                or InputLabel.get() not in part_el2.text: 
-                continue 
-        
-            _text = '[' + str(i) + '] ' + \
-                getStr(item.find('FACLT_NM').text) + \
-                ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
-            listBox.insert(i-1, _text)
-            i = i+1
-            gplist[3]+=1
+            i = 1
+            for item in elements: # " row“ element들
+                part_el = item.find('SIGUN_NM')
+                part_el2 = item.find('FACLT_NM') 
+
+                if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
+                    or InputLabel.get() not in part_el2.text: 
+                    continue 
+
+                _text = '[' + str(i) + '] ' + \
+                    getStr(item.find('FACLT_NM').text) + \
+                    ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+                listBox.insert(i-1, _text)
+                i = i+1
+
+    else:
+        if not chk == 3:
+            with open('xml/초중고등학교현황.xml', 'rb') as f: 
+                strXml = f.read().decode('utf-8')
+            parseData = ElementTree.fromstring(strXml) 
+            
+            elements = parseData.iter('row')
+                
+            i = 1
+            for item in elements: # " row“ element들
+                part_el = item.find('SIGUN_NM')
+                part_el2 = item.find('FACLT_NM')
+                SCHOOL_DIV = item.find('SCHOOL_DIV_NM')
+                # if InputLabel.get() not in part_el.text or School_text not in SCHOOL_DIV.text: 
+                #     continue 
+            
+                if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text or School_text not in SCHOOL_DIV.text \
+                    or InputLabel.get() not in part_el2.text: 
+                    continue 
+            
+                _text = '[' + str(i) + '] ' + \
+                    getStr(item.find('FACLT_NM').text) + \
+                    ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+                listBox.insert(i-1, _text)
+                i = i+1
+                if ("초등학교" in SCHOOL_DIV.text): gplist[0]+=1
+                elif ("중학교" in SCHOOL_DIV.text): gplist[1]+=1
+                else : gplist[2]+=1
+        else:
+            with open('xml/전문및대학교현황.xml', 'rb') as f: 
+                strXml = f.read().decode('utf-8')
+            parseData = ElementTree.fromstring(strXml) 
+            
+            elements = parseData.iter('row')
+
+            i = 1
+            for item in elements: # " row“ element들
+                part_el = item.find('SIGUN_NM')
+                part_el2 = item.find('FACLT_NM')
+
+                if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
+                    or InputLabel.get() not in part_el2.text: 
+                    continue 
+            
+                _text = '[' + str(i) + '] ' + \
+                    getStr(item.find('FACLT_NM').text) + \
+                    ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+                listBox.insert(i-1, _text)
+                i = i+1
+                gplist[3]+=1
 
     graph = Canvas(frameResult,bg='Red',width = 200)
     graph.delete('gp')
