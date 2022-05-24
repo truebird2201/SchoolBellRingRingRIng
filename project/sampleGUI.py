@@ -99,7 +99,8 @@ def InitScreen():
     # 그래프
 
 def drawGraph(canvas,data,canvasWidth,canvasHeight):
-    canvas.delete('gp')
+    canvas.delete(ALL)
+
     nData = len(data)
     nMax = max(data)
     nMin=min(data)
@@ -183,6 +184,7 @@ def getStr(s):
 
 def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
     global listBox, LocalCombo
+    gplist = [0,0,0,0]
     listBox.delete(0,listBox.size()) 
     School_text = ""
     if chk == 0:
@@ -218,6 +220,9 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                 ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
             listBox.insert(i-1, _text)
             i = i+1
+            if ("초등학교" in SCHOOL_DIV.text): gplist[0]+=1
+            elif ("중학교" in SCHOOL_DIV.text): gplist[1]+=1
+            else : gplist[2]+=1
     else:
         with open('xml/전문및대학교현황.xml', 'rb') as f: 
             strXml = f.read().decode('utf-8')
@@ -239,10 +244,12 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                 ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
             listBox.insert(i-1, _text)
             i = i+1
-    
+            gplist[3]+=1
+
     graph = Canvas(frameResult,bg='Red',width = 200)
-    graph.pack(side="right", fill='y')
-    drawGraph(graph, parseData, 210, 400)
+    graph.delete('gp')
+    graph.place(x=255,y=0 ,width=200,height=380,anchor= "nw")
+    drawGraph(graph, gplist, 210, 400)
 
 def Local_List_add(locallist):
     with open('xml/초중고등학교현황.xml', 'rb') as f: 
