@@ -248,8 +248,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                     continue 
 
                 _text = '[' + str(i) + '] ' + \
-                    getStr(item.find('FACLT_NM').text) + \
-                    ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+                    getStr(item.find('FACLT_NM').text)
                 listBox.insert(i-1, _text)
                 i = i+1
                 if ("초등학교" in SCHOOL_DIV.text): gplist[0]+=1
@@ -272,8 +271,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                     continue 
 
                 _text = '[' + str(i) + '] ' + \
-                    getStr(item.find('FACLT_NM').text) + \
-                    ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+                    getStr(item.find('FACLT_NM').text)
                 listBox.insert(i-1, _text)
                 i = i+1
                 gplist[3]+=1
@@ -299,8 +297,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                     continue 
             
                 _text = '[' + str(i) + '] ' + \
-                    getStr(item.find('FACLT_NM').text) + \
-                    ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+                    getStr(item.find('FACLT_NM').text)
                 listBox.insert(i-1, _text)
                 i = i+1
                 if ("초등학교" in SCHOOL_DIV.text): gplist[0]+=1
@@ -323,8 +320,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                     continue 
             
                 _text = '[' + str(i) + '] ' + \
-                    getStr(item.find('FACLT_NM').text) + \
-                    ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
+                    getStr(item.find('FACLT_NM').text)
                 listBox.insert(i-1, _text)
                 i = i+1
                 gplist[3]+=1
