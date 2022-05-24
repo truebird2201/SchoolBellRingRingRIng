@@ -1,3 +1,4 @@
+from os import scandir
 from tkinter import *
 from tkinter import font
 from tkinter import ttk
@@ -6,6 +7,7 @@ import tkintermapview
 
 g_Tk = Tk()
 g_Tk.title("학교종이 땡땡땡")
+
 img = PhotoImage(file='image/Title.png')
 img1 = PhotoImage(file='image/Search.png')
 img2 = PhotoImage(file='image/BookMark.png')
@@ -16,7 +18,7 @@ def event_for_listbox(event): # 리스트 선택 시 내용 출력
     if selection:
         index = selection[0]
         data = event.widget.get(index)
-        OnSchool(data)
+        OnSchool(data.split()[1])
 
 
 def InitScreen(): 
@@ -47,19 +49,19 @@ def InitScreen():
     radioValue = IntVar()
     global rcheck
     rcheck = 0
-    r1 = Radiobutton(frameCombo, font=fontNormal, value=0, variable=radioValue, text="초등학교", command=lambda:CheckRadio(0), bg='#fff0f6') 
+    r1 = Radiobutton(frameCombo, font=fontNormal, value=0, variable=radioValue, text="초등학교", command=lambda:CheckRadio(0), bg='#fff7a9',activebackground= '#fff481',) 
     r1.pack(side='left',expand=True, fill="both")
     
-    r2 = Radiobutton(frameCombo, font=fontNormal, value=1, variable=radioValue, text="중학교", command=lambda:CheckRadio(1), bg='#fff0f6') 
+    r2 = Radiobutton(frameCombo, font=fontNormal, value=1, variable=radioValue, text="중학교", command=lambda:CheckRadio(1), bg='#fff7a9',activebackground = '#fff481') 
     r2.pack(side='left',expand=True, fill="both")
 
-    r3 = Radiobutton(frameCombo, font=fontNormal, value=2, variable=radioValue, text="고등학교", command=lambda:CheckRadio(2), bg='#fff0f6') 
+    r3 = Radiobutton(frameCombo, font=fontNormal, value=2, variable=radioValue, text="고등학교", command=lambda:CheckRadio(2), bg='#fff7a9',activebackground = '#fff481') 
     r3.pack(side='left',expand=True, fill="both")
 
-    r4 = Radiobutton(frameCombo, font=fontNormal, value=3, variable=radioValue, text="대학교/대학원", command=lambda:CheckRadio(3), bg='#fff0f6') 
+    r4 = Radiobutton(frameCombo, font=fontNormal, value=3, variable=radioValue, text="대학교/대학원", command=lambda:CheckRadio(3), bg='#fff7a9',activebackground = '#fff481') 
     r4.pack(side='left',expand=True, fill="both")
 
-    r5 = Radiobutton(frameCombo, font=fontNormal, value=4, variable=radioValue, text="모두", command=lambda:CheckRadio(4), bg='#fff0f6') 
+    r5 = Radiobutton(frameCombo, font=fontNormal, value=4, variable=radioValue, text="모두", command=lambda:CheckRadio(4), bg='#fff7a9',activebackground = '#fff481') 
     r5.pack(side='left',expand=True, fill="both")
     
 
@@ -117,15 +119,15 @@ def drawGraph(canvas,data,canvasWidth,canvasHeight):
     bottom = canvasHeight - 20
     maxheight = canvasHeight - 40
     for i in range(nData):
-        if nMax == data[i]:color="Red"
-        elif nMin == data[i]:color="Blue"
+        if nMax == data[i]:color="#fff052"
+        elif nMin == data[i]:color="#fffaca"
         else:color="Grey"
 
         curHeight = maxheight * data[i]/nMax
         top = bottom - curHeight
         left = i*rectWidth
         right=(i+1)*rectWidth
-        canvas.create_rectangle(left,top,right,bottom,fill=color,tag='gp',activefill='Yellow')
+        canvas.create_rectangle(left,top,right,bottom,fill=color,tag='gp',activefill='#fff7a9')
 
         canvas.create_text((left+right)//2,top-10,text=data[i],tags='gp')
         canvas.create_text((left+right)//2,bottom+10,text=i+1,tags='gp')
@@ -168,7 +170,7 @@ def OnSchool(name):              # 학교 팝업
     frameTitle = Frame(sc, bg='#fffbd2')
     frameTitle.pack(side="top", fill="x")
 
-    titleimg = Label(frameTitle,font = fontTitle, bg='#fffbd2',text="초등학교")
+    titleimg = Label(frameTitle,font = fontTitle, bg='#fffbd2',text=name, fg= "#ff9d00")
     titleimg.pack(fill="both",expand=True, anchor = "w")
 
     frameinfo = Frame(sc, pady=10, bg='#fffbd2')
@@ -176,9 +178,9 @@ def OnSchool(name):              # 학교 팝업
     framebotton = Frame(sc, pady=10, bg='#fffbd2')
     framebotton.pack(side="bottom", fill="both", expand=True)
 
-    SearchButton = Button(framebotton, font = fontNormal,image=img3, text="지도", command=OnMap)
+    SearchButton = Button(framebotton, font = fontNormal,image=img3, text="북마크 추가", command=OnMap)
     SearchButton.pack(side="left", padx=10, pady=5)
-    SearchButton = Button(framebotton, font = fontNormal,image=img2, text="북마크",command=OnBookMark)
+    SearchButton = Button(framebotton, font = fontNormal,image=img2, text="메일",command=OnMail)
     SearchButton.pack(side="right", padx=10, pady=5)
 
     infoBox = Listbox(frameinfo, selectmode='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
@@ -187,6 +189,19 @@ def OnSchool(name):              # 학교 팝업
     infoBox.bind()
     infoBox.pack(side='left', anchor='n', padx=10, expand=False, fill="x")
 
+def OnMail():         #메일 보내기 팝업
+    global g_Tk
+    mp = Toplevel(g_Tk)
+    mp.title("이메일 주소 입력")
+
+    inputmail = Entry(mp,width=50)
+    inputmail.pack(fill='x',pady = 10,expand=True)
+    
+    bt = Button(mp,text = "보내기",command = SendMail)
+    bt.pack(anchor="s",padx=10,pady=10)
+
+def SendMail():
+    pass
 
 def OnMap():              # 지도 팝업
     global g_Tk
