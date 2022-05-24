@@ -121,13 +121,13 @@ def drawGraph(canvas,data,canvasWidth,canvasHeight):
     for i in range(nData):
         if nMax == data[i]:color="#fff052"
         elif nMin == data[i]:color="#fffaca"
-        else:color="Grey"
+        else:color="#fff7a9"
 
         curHeight = maxheight * data[i]/nMax
         top = bottom - curHeight
         left = i*rectWidth
         right=(i+1)*rectWidth
-        canvas.create_rectangle(left,top,right,bottom,fill=color,tag='gp',activefill='#fff7a9')
+        canvas.create_rectangle(left,top,right,bottom,fill=color,tag='gp',activefill='#cbff52')
 
         canvas.create_text((left+right)//2,top-10,text=data[i],tags='gp')
         canvas.create_text((left+right)//2,bottom+10,text=i+1,tags='gp')
@@ -241,6 +241,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
             for item in elements: # " row“ element들
                 part_el = item.find('SIGUN_NM')
                 part_el2 = item.find('FACLT_NM')
+                SCHOOL_DIV = item.find('SCHOOL_DIV_NM')
 
                 if not LocalCombo.get() == "모두" and LocalCombo.get() not in part_el.text \
                     or InputLabel.get() not in part_el2.text: 
@@ -251,6 +252,9 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                     ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
                 listBox.insert(i-1, _text)
                 i = i+1
+                if ("초등학교" in SCHOOL_DIV.text): gplist[0]+=1
+                elif ("중학교" in SCHOOL_DIV.text): gplist[1]+=1
+                else : gplist[2]+=1
 
         with open('xml/전문및대학교현황.xml', 'rb') as f: 
             strXml = f.read().decode('utf-8')
@@ -272,6 +276,7 @@ def SearchLibrary(chk): # "검색" 버튼 -> "도서관"
                     ' : ' + getStr(item.find('REFINE_ROADNM_ADDR').text)
                 listBox.insert(i-1, _text)
                 i = i+1
+                gplist[3]+=1
 
     else:
         if not chk == 3:
