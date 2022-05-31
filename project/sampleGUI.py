@@ -18,6 +18,7 @@ img1 = PhotoImage(file='image/Search.png')
 img2 = PhotoImage(file='image/BookMark.png')
 img3 = PhotoImage(file='image/map.png')
 
+BookMarkList=[]
 def event_for_listbox(event): # 리스트 선택 시 내용 출력
     selection = event.widget.curselection()
     if selection:
@@ -27,6 +28,7 @@ def event_for_listbox(event): # 리스트 선택 시 내용 출력
 
 
 def InitScreen(): 
+
     fontTitle = font.Font(g_Tk, size=18, weight='bold', family = '나눔고딕')
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
     fontin = font.Font(g_Tk, size=13, weight='bold')
@@ -146,7 +148,10 @@ def onSearch(): # "검색" 버튼 이벤트처리
     SearchLibrary(rcheck) 
 
 def OnBookMark():              # 북마크 팝업
-    global g_Tk
+    global g_Tk,BookMarkList
+    f=open('BookMark.txt','rb')
+    BookMarkList=pickle.load(f)
+
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
     bm=Toplevel(g_Tk)
     bm.title("북마크")
@@ -158,11 +163,16 @@ def OnBookMark():              # 북마크 팝업
     bmlistBox = Listbox(bmframe, selectmode ='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
         font=fontNormal, width=20, height=15, bg= 'White',\
         borderwidth=2, relief='ridge', yscrollcommand=bmLBScrollbar.set)
-    bmlistBox.bind()
+    bmlistBox.bind('<<ListboxSelect>>', BookMarkList)
     bmlistBox.pack(side='left', anchor='n', expand=False, fill="x")
 
     bmLBScrollbar.pack(side='left',fill='y')
     bmLBScrollbar.config(command=listBox.yview)
+
+def AddBookMark(name):               # 북마크 추가
+    f=open('BookMark.txt','ab')
+    pickle.dump(name,f)
+    f.close()
 
 def OnSchool(name):              # 학교 팝업
     global g_Tk
@@ -183,7 +193,7 @@ def OnSchool(name):              # 학교 팝업
     framebotton = Frame(sc, pady=10, bg='#fffbd2')
     framebotton.pack(side="bottom", fill="both", expand=True)
 
-    SearchButton = Button(framebotton, font = fontNormal,image=img3, text="북마크 추가", command=OnMap)
+    SearchButton = Button(framebotton, font = fontNormal,image=img3, text="북마크 추가", command=AddBookMark(name))
     SearchButton.pack(side="left", padx=10, pady=5)
     SearchButton = Button(framebotton, font = fontNormal,image=img2, text="메일",command=OnMail)
     SearchButton.pack(side="right", padx=10, pady=5)
