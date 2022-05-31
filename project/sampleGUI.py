@@ -27,6 +27,11 @@ def event_for_listbox(event): # 리스트 선택 시 내용 출력
         data = event.widget.get(index)
         OnSchool(data.split()[1])
 
+def event_for_BookMarklistbox(event): # 북마크리스트 선택 시 내용 출력
+    selection = event.widget.curselection()
+    if selection:
+        OnSchool(event.widget.get(selection))
+
 
 def InitScreen(): 
     f=open('BookMark.txt','ab')
@@ -174,7 +179,8 @@ def OnBookMark():              # 북마크 팝업
     for i in BookMarkList:
         bmlistBox.insert(cnt,i)
         cnt+=1
-    bmlistBox.bind('<<ListboxSelect>>', event_for_listbox)
+    
+    bmlistBox.bind('<<ListboxSelect>>', event_for_BookMarklistbox)
     bmlistBox.pack(side='left', anchor='n', expand=False, fill="x")
 
     bmLBScrollbar.pack(side='left',fill='y')
@@ -192,7 +198,7 @@ def Clear():
     bm.destroy()
 
 def AddBookMark(name):               # 북마크 추가
-    global BookMarkList
+    global BookMarkList,bm
     f=open('BookMark.txt','rb')
     while True:
         try :    
@@ -210,6 +216,7 @@ def AddBookMark(name):               # 북마크 추가
         f=open('BookMark.txt','wb')
         pickle.dump(BookMarkList,f)
         f.close()
+    bm.destroy()
 
 def OnSchool(name):              # 학교 팝업
     global g_Tk,BookMarkList
