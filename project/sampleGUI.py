@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import font
 from tkinter import ttk
 from xml.etree import ElementTree
+from email.mime.text import MIMEText
 import tkintermapview
 
 g_Tk = Tk()
@@ -189,6 +190,7 @@ def OnSchool(name):              # 학교 팝업
     infoBox.bind()
     infoBox.pack(side='left', anchor='n', padx=10, expand=False, fill="x")
 
+
 def OnMail():         #메일 보내기 팝업
     global g_Tk
     mp = Toplevel(g_Tk)
@@ -197,11 +199,22 @@ def OnMail():         #메일 보내기 팝업
     inputmail = Entry(mp,width=50)
     inputmail.pack(fill='x',pady = 10,expand=True)
     
-    bt = Button(mp,text = "보내기",command = SendMail)
+    senderAddr = 'lsy0112114@gmail.com'
+    recipientAddr = inputmail.get()
+    msg = MIMEText('본문: ㅎㅇ')
+    msg['Subject'] = '제목 : 함보'
+
+    bt = Button(mp,text = "보내기",command = SendMail(senderAddr,recipientAddr,msg))
     bt.pack(anchor="s",padx=10,pady=10)
 
-def SendMail():
-    pass
+def SendMail(fromAddr,toAddr,msg):
+    import smtplib
+    s = smtplib.SMTP("smtp.gmail.com",587)
+    s.starttls()
+
+    s.login('lsy0112114@gmail.com','fozxzasvghelpqvo')
+    s.sendmail(fromAddr,[toAddr],msg.as_string())
+    s.close()
 
 def OnMap():              # 지도 팝업
     global g_Tk
