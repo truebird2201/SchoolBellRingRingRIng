@@ -18,6 +18,9 @@ img = PhotoImage(file='image/Title.png')
 img1 = PhotoImage(file='image/Search.png')
 img2 = PhotoImage(file='image/BookMark.png')
 img3 = PhotoImage(file='image/map.png')
+img4 = PhotoImage(file='image/Reset.png')
+img5 = PhotoImage(file='image/Mail.png')
+img6 = PhotoImage(file='image/Cancle.png')
 
 BookMarkList=[]
 def event_for_listbox(event): # 리스트 선택 시 내용 출력
@@ -186,7 +189,7 @@ def OnBookMark():              # 북마크 팝업
     bmLBScrollbar.pack(side='left',fill='y')
     bmLBScrollbar.config(command=listBox.yview)
 
-    ClearButton = Button(bmframe, font = fontNormal,text="초기화",command = Clear)
+    ClearButton = Button(bmframe, font = fontNormal,image = img4,text="초기화",command = Clear)
     ClearButton.pack(side="left", padx=10, pady=5)
 
 def Clear():
@@ -244,12 +247,12 @@ def OnSchool(name):              # 학교 팝업
             f.close()
             break
     if(name in BookMarkList):
-        BookButton = Button(framebotton, font = fontNormal,text="북마크 삭제", command = lambda : AddBookMark(name))
+        BookButton = Button(framebotton, font = fontNormal,image=img6,text="북마크 삭제", command = lambda : AddBookMark(name))
         BookButton.pack(side="left", padx=10, pady=5)
     else:
-        BookButton = Button(framebotton, font = fontNormal,image=img3, text="북마크 추가", command = lambda : AddBookMark(name))
+        BookButton = Button(framebotton, font = fontNormal,image=img2, text="북마크 추가", command = lambda : AddBookMark(name))
         BookButton.pack(side="left", padx=10, pady=5)
-    MailButton = Button(framebotton, font = fontNormal,image=img2, text="메일",command= OnMail)
+    MailButton = Button(framebotton, font = fontNormal,image=img5, text="메일",command= OnMail)
     MailButton.pack(side="right", padx=10, pady=5)
 
     infoBox = Listbox(frameinfo, selectmode='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
