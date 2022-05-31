@@ -267,10 +267,10 @@ def OnMail():         #메일 보내기 팝업
     inputmail = Entry(mp,width=50)
     inputmail.pack(fill='x',pady = 10,expand=True)
     
-    senderAddr = 'lsy0112114@gmail.com'
-    recipientAddr = inputmail.get()
     msg = MIMEText('본문: ㅎㅇ')
     msg['Subject'] = '제목 : 함보'
+    senderAddr = 'lsy0112114@gmail.com'
+    recipientAddr = 'lsy0112114@gmail.com'
 
     bt = Button(mp,text = "보내기",command = lambda : SendMail(senderAddr,recipientAddr,msg))
     bt.pack(anchor="s",padx=10,pady=10)
