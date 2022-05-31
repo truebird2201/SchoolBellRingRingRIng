@@ -205,6 +205,11 @@ def AddBookMark(name):               # 북마크 추가
         BookMarkList.append(name)
         pickle.dump(BookMarkList,f)
         f.close()
+    else:
+        BookMarkList.remove(name)
+        f=open('BookMark.txt','ab')
+        pickle.dump(BookMarkList,f)
+        f.close()
 
 def OnSchool(name):              # 학교 팝업
     global g_Tk
