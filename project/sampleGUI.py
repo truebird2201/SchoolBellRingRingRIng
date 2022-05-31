@@ -10,6 +10,7 @@ import pickle
 
 g_Tk = Tk()
 mp=None
+bm=None
 addE=None
 g_Tk.title("학교종이 땡땡땡")
 
@@ -149,7 +150,7 @@ def onSearch(): # "검색" 버튼 이벤트처리
     SearchLibrary(rcheck) 
 
 def OnBookMark():              # 북마크 팝업
-    global g_Tk,BookMarkList
+    global g_Tk,BookMarkList,bm
     f=open('BookMark.txt','rb')
     while True:
         try :    
@@ -178,6 +179,17 @@ def OnBookMark():              # 북마크 팝업
 
     bmLBScrollbar.pack(side='left',fill='y')
     bmLBScrollbar.config(command=listBox.yview)
+
+    ClearButton = Button(bmframe, font = fontNormal,text="초기화",command = Clear)
+    ClearButton.pack(side="left", padx=10, pady=5)
+
+def Clear():
+    global BookMarkList,bm
+    BookMarkList=[]
+    f=open('BookMark.txt','ab')
+    pickle.dump(BookMarkList,f)
+    f.close()
+    bm.destroy()
 
 def AddBookMark(name):               # 북마크 추가
     global BookMarkList
