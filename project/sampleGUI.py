@@ -28,7 +28,8 @@ def event_for_listbox(event): # 리스트 선택 시 내용 출력
 
 
 def InitScreen(): 
-
+    f=open('BookMark.txt','ab')
+    f.close()
     fontTitle = font.Font(g_Tk, size=18, weight='bold', family = '나눔고딕')
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
     fontin = font.Font(g_Tk, size=13, weight='bold')
@@ -150,7 +151,12 @@ def onSearch(): # "검색" 버튼 이벤트처리
 def OnBookMark():              # 북마크 팝업
     global g_Tk,BookMarkList
     f=open('BookMark.txt','rb')
-    BookMarkList=pickle.load(f)
+    while True:
+        try :    
+            BookMarkList=pickle.load(f)
+        except EOFError:
+            f.close()
+            break
 
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
     bm=Toplevel(g_Tk)
@@ -163,16 +169,30 @@ def OnBookMark():              # 북마크 팝업
     bmlistBox = Listbox(bmframe, selectmode ='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
         font=fontNormal, width=20, height=15, bg= 'White',\
         borderwidth=2, relief='ridge', yscrollcommand=bmLBScrollbar.set)
-    bmlistBox.bind('<<ListboxSelect>>', BookMarkList)
+    cnt=0
+    for i in BookMarkList:
+        bmlistBox.insert(cnt,i)
+        cnt+=1
+    bmlistBox.bind()
     bmlistBox.pack(side='left', anchor='n', expand=False, fill="x")
 
     bmLBScrollbar.pack(side='left',fill='y')
     bmLBScrollbar.config(command=listBox.yview)
 
 def AddBookMark(name):               # 북마크 추가
-    f=open('BookMark.txt','ab')
-    pickle.dump(name,f)
-    f.close()
+    global BookMarkList
+    f=open('BookMark.txt','rb')
+    while True:
+        try :    
+            BookMarkList=pickle.load(f)
+        except EOFError:
+            f.close()
+            break
+    if (name not in BookMarkList):
+        f=open('BookMark.txt','ab')
+        BookMarkList.append(name)
+        pickle.dump(BookMarkList,f)
+        f.close()
 
 def OnSchool(name):              # 학교 팝업
     global g_Tk
@@ -193,20 +213,20 @@ def OnSchool(name):              # 학교 팝업
     framebotton = Frame(sc, pady=10, bg='#fffbd2')
     framebotton.pack(side="bottom", fill="both", expand=True)
 
-    SearchButton = Button(framebotton, font = fontNormal,image=img3, text="북마크 추가", command=AddBookMark(name))
-    SearchButton.pack(side="left", padx=10, pady=5)
-    SearchButton = Button(framebotton, font = fontNormal,image=img2, text="메일",command=OnMail)
-    SearchButton.pack(side="right", padx=10, pady=5)
+    BookButton = Button(framebotton, font = fontNormal,image=img3, text="북마크 추가", command = lambda : AddBookMark(name))
+    BookButton.pack(side="left", padx=10, pady=5)
+    MailButton = Button(framebotton, font = fontNormal,image=img2, text="메일",command= OnMail)
+    MailButton.pack(side="right", padx=10, pady=5)
 
     infoBox = Listbox(frameinfo, selectmode='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
         font=fontNormal,width=40, height=15, bg= 'White',\
         borderwidth=2, relief='ridge')
-    infoBox.bind()
+    infoBox.bind('<<ListboxSelect>>', event_for_listbox)
     infoBox.pack(side='left', anchor='n', padx=10, expand=False, fill="x")
 
 
 def OnMail():         #메일 보내기 팝업
-    global g_Tk,mp
+    global g_Tk
     mp = Toplevel(g_Tk)
     mp.title("이메일 주소 입력")
 
@@ -218,13 +238,9 @@ def OnMail():         #메일 보내기 팝업
     msg = MIMEText('본문: ㅎㅇ')
     msg['Subject'] = '제목 : 함보'
 
-    bt = Button(mp,text = "보내기",command = emailinput(inputmail))
+    bt = Button(mp,text = "보내기",command = lambda : SendMail(senderAddr,recipientAddr,msg))
     bt.pack(anchor="s",padx=10,pady=10)
 
-def emailinput(inpute):
-    global mp,addE
-    addE=inpute.get()
-    mp.destroy()
 def SendMail(fromAddr,toAddr,msg):
     import smtplib
     s = smtplib.SMTP("smtp.gmail.com",587)
@@ -233,6 +249,7 @@ def SendMail(fromAddr,toAddr,msg):
     s.login('lsy0112114@gmail.com','fozxzasvghelpqvo')
     s.sendmail(fromAddr,[toAddr],msg.as_string())
     s.close()
+
 
 def OnMap():              # 지도 팝업
     global g_Tk
