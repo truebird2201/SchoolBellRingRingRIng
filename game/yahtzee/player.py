@@ -5,7 +5,7 @@ class Player:
 
     def __init__(self, name):
         self.name = name
-        itemcount = self.UPPER+self.LOWER
+        itemcount = self.UPPER+self.LOWER+2
         self.scores = [0 for i in range(itemcount)] # 13개 category 점수
         self.used = [False for i in range(itemcount)]    # 13개 caterory 사용여부
 
@@ -31,7 +31,7 @@ class Player:
         return True
 
     def allLowerUsed(self):    # LOWER category 전부 사용되을 때 True, 그외는 False 반환
-        i = self.UPPER
+        i = self.UPPER + 2
         for _i in range(self.LOWER):
             if self.used[i] == False:
                 return False
