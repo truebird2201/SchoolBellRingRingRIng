@@ -1,12 +1,16 @@
 from os import scandir
+from socket import AddressFamily
 from tkinter import *
 from tkinter import font
 from tkinter import ttk
 from xml.etree import ElementTree
 from email.mime.text import MIMEText
 import tkintermapview
+import pickle
 
 g_Tk = Tk()
+mp=None
+addE=None
 g_Tk.title("학교종이 땡땡땡")
 
 img = PhotoImage(file='image/Title.png')
@@ -192,7 +196,7 @@ def OnSchool(name):              # 학교 팝업
 
 
 def OnMail():         #메일 보내기 팝업
-    global g_Tk
+    global g_Tk,mp
     mp = Toplevel(g_Tk)
     mp.title("이메일 주소 입력")
 
@@ -204,9 +208,13 @@ def OnMail():         #메일 보내기 팝업
     msg = MIMEText('본문: ㅎㅇ')
     msg['Subject'] = '제목 : 함보'
 
-    bt = Button(mp,text = "보내기",command = SendMail(senderAddr,recipientAddr,msg))
+    bt = Button(mp,text = "보내기",command = emailinput(inputmail))
     bt.pack(anchor="s",padx=10,pady=10)
 
+def emailinput(inpute):
+    global mp,addE
+    addE=inpute.get()
+    mp.destroy()
 def SendMail(fromAddr,toAddr,msg):
     import smtplib
     s = smtplib.SMTP("smtp.gmail.com",587)
