@@ -1,6 +1,8 @@
 import string
 from tkinter import *
 from tkinter import font
+
+from click import command
 from player import *
 from dice import *
 from configuration import *
@@ -198,7 +200,30 @@ class YahtzeeBoard:
         # -> 이긴 사람을 알리고 새 게임 시작.
         # TODO: 구현
         if self.round == 13:
-            print("게임 종료")
+            messagebox.showinfo(title="게임 종료", message=self.players[0].toString() + " 승리!")
+            # 초기화 
+            self.round = 0
+            for i in range(5):
+                self.diceButtons[i].configure(text='?')
+                self.diceButtons[i]['state'] = 'normal'
+                self.diceButtons[i]['bg'] = self.color_btn_bg
+
+            for i in range(self.TOTAL + 1):
+                for j in range(self.numPlayers):
+                    self.fields[i][j].configure(text='')
+                    if j == self.player:
+                        self.fields[i][j]['state'] = 'normal'
+                        self.fields[i][j]['bg'] = self.color_btn_bg
+                    if i == 6 or i == 7 or i == 15 or i == 16:
+                        self.fields[i][j]['state'] = 'disabled'
+                        self.fields[i][j]['bg'] = 'light gray'
+            
+            self.players = []
+            for i in range(1, self.numPlayers+1):
+                self.players.append(Player(str(self.entry[i].get())))
+
+
+
 
         # 다시 Roll Dice 버튼과 diceButtons 버튼들을 활성화.
         self.rollDice.configure(text="Roll Dice")
