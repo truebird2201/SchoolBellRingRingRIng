@@ -174,7 +174,7 @@ def OnBookMark():              # 북마크 팝업
     for i in BookMarkList:
         bmlistBox.insert(cnt,i)
         cnt+=1
-    bmlistBox.bind()
+    bmlistBox.bind('<<ListboxSelect>>', event_for_listbox)
     bmlistBox.pack(side='left', anchor='n', expand=False, fill="x")
 
     bmLBScrollbar.pack(side='left',fill='y')
@@ -186,7 +186,7 @@ def OnBookMark():              # 북마크 팝업
 def Clear():
     global BookMarkList,bm
     BookMarkList=[]
-    f=open('BookMark.txt','ab')
+    f=open('BookMark.txt','wb')
     pickle.dump(BookMarkList,f)
     f.close()
     bm.destroy()
@@ -201,18 +201,18 @@ def AddBookMark(name):               # 북마크 추가
             f.close()
             break
     if (name not in BookMarkList):
-        f=open('BookMark.txt','ab')
+        f=open('BookMark.txt','wb')
         BookMarkList.append(name)
         pickle.dump(BookMarkList,f)
         f.close()
     else:
         BookMarkList.remove(name)
-        f=open('BookMark.txt','ab')
+        f=open('BookMark.txt','wb')
         pickle.dump(BookMarkList,f)
         f.close()
 
 def OnSchool(name):              # 학교 팝업
-    global g_Tk
+    global g_Tk,BookMarkList
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
     fontTitle = font.Font(g_Tk, size=25, weight='bold',family = "나눔고딕")
     sc=Toplevel(g_Tk)
@@ -229,9 +229,19 @@ def OnSchool(name):              # 학교 팝업
     frameinfo.pack()
     framebotton = Frame(sc, pady=10, bg='#fffbd2')
     framebotton.pack(side="bottom", fill="both", expand=True)
-
-    BookButton = Button(framebotton, font = fontNormal,image=img3, text="북마크 추가", command = lambda : AddBookMark(name))
-    BookButton.pack(side="left", padx=10, pady=5)
+    f=open('BookMark.txt','rb')
+    while True:
+        try :    
+            BookMarkList=pickle.load(f)
+        except EOFError:
+            f.close()
+            break
+    if(name in BookMarkList):
+        BookButton = Button(framebotton, font = fontNormal,text="북마크 삭제", command = lambda : AddBookMark(name))
+        BookButton.pack(side="left", padx=10, pady=5)
+    else:
+        BookButton = Button(framebotton, font = fontNormal,image=img3, text="북마크 추가", command = lambda : AddBookMark(name))
+        BookButton.pack(side="left", padx=10, pady=5)
     MailButton = Button(framebotton, font = fontNormal,image=img2, text="메일",command= OnMail)
     MailButton.pack(side="right", padx=10, pady=5)
 
