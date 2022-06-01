@@ -233,10 +233,10 @@ class YahtzeeBoard:
                         self.fields[i][j]['bg'] = 'light gray'
             
             for player in self.players:
-                for used in player.used:
-                    used = False
-                for score in player.scores:
-                    score = 0
+                player.scores = [0 for i in range(15)] 
+                player.used = [False for i in range(15)]
+            
+
 
         # 다시 Roll Dice 버튼과 diceButtons 버튼들을 활성화.
         self.rollDice.configure(text="Roll Dice")
