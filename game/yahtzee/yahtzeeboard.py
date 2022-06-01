@@ -253,7 +253,7 @@ class YahtzeeBoard:
             dice.roll = 0
 
         # bottomLabel 초기화.
-        self.bottomLabel.configure(text=cur_player.toString()+
+        self.bottomLabel.configure(text=self.players[self.player].toString()+
             "차례: Roll Dice 버튼을 누르세요")
 
 if __name__ == '__main__':
