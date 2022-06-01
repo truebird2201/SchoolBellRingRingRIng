@@ -199,10 +199,24 @@ class YahtzeeBoard:
         # 게임이 종료되었는지 검사 (13 round의 마지막 플레이어일 때) 
         # -> 이긴 사람을 알리고 새 게임 시작.
         # TODO: 구현
-        if self.round == 13:
-            messagebox.showinfo(title="게임 종료", message=self.players[0].toString() + " 승리!")
+        if self.round >= 13:
+            MaxScore = 0
+            for j in range(self.numPlayers):
+                if MaxScore < self.fields[16][j]['text']:
+                    MaxScore = self.fields[16][j]['text']
+            winlist = []
+            for j in range(self.numPlayers):
+                if MaxScore == self.fields[16][j]['text']:
+                    winlist.append(j)
+            
+            if len(winlist) == 1:
+                messagebox.showinfo(title="게임 종료", message=self.players[winlist[0]].toString() + " 승리!")
+            else :
+                messagebox.showinfo(title="게임 종료", message="무승부!")
+            
             # 초기화 
             self.round = 0
+            self.player = 0
             for i in range(5):
                 self.diceButtons[i].configure(text='?')
                 self.diceButtons[i]['state'] = 'normal'
@@ -218,12 +232,11 @@ class YahtzeeBoard:
                         self.fields[i][j]['state'] = 'disabled'
                         self.fields[i][j]['bg'] = 'light gray'
             
-            self.players = []
-            for i in range(1, self.numPlayers+1):
-                self.players.append(Player(str(self.entry[i].get())))
-
-
-
+            for player in self.players:
+                for used in player.used:
+                    used = False
+                for score in player.scores:
+                    score = 0
 
         # 다시 Roll Dice 버튼과 diceButtons 버튼들을 활성화.
         self.rollDice.configure(text="Roll Dice")
