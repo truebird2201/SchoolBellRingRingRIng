@@ -252,6 +252,7 @@ def OnSchool(name):              # 학교 팝업
     else:
         BookButton = Button(framebotton, font = fontNormal,image=img2, text="북마크 추가", command = lambda : AddBookMark(name))
         BookButton.pack(side="left", padx=10, pady=5)
+
     MailButton = Button(framebotton, font = fontNormal,image=img5, text="메일",command= OnMail)
     MailButton.pack(side="right", padx=10, pady=5)
 
@@ -319,6 +320,8 @@ def OnMap():              # 지도 팝업
     # print(marker_1.position, marker_1.text) # get position and text 
     marker_1.set_text("한국공학대학교") # set new text 
     map_widget.set_zoom(13) # 0~19 (19 is the highest zoom level)
+
+    
 
 def onSearch_Map():
     SearchLibrary(4, True)
