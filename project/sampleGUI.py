@@ -256,11 +256,12 @@ def OnSchool(name):              # 학교 팝업
     MailButton.pack(side="right", padx=10, pady=5)
 
     infoBox = Listbox(frameinfo, selectmode='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
-        font=fontNormal,width=40, height=15, bg= 'White',\
+        font=font.Font(g_Tk, size=10, weight='bold'),width=40, height=15, bg= 'White',\
         borderwidth=2, relief='ridge')
-    infoBox.bind('<<ListboxSelect>>', event_for_listbox)
+    # infoBox.bind('<<ListboxSelect>>', event_for_listbox)
     infoBox.pack(side='left', anchor='n', padx=10, expand=False, fill="x")
-
+    AddInformation(infoBox, name)
+    
 
 def OnMail():         #메일 보내기 팝업
     global g_Tk
@@ -509,7 +510,46 @@ def Local_List_add(locallist):
         if part_el.text in locallist: 
             continue 
         locallist.append(part_el.text)
-    
+
+def AddInformation(list, name):
+    with open('xml/초중고등학교현황.xml', 'rb') as f: 
+        strXml = f.read().decode('utf-8')
+    parseData = ElementTree.fromstring(strXml) 
+    elements = parseData.iter('row')
+
+    for item in elements: # " row“ element들
+        part_name = item.find('FACLT_NM')
+        
+        if name == part_name.text:
+            list.insert(0, '지역 : ' + getStr(item.find('SIGUN_NM').text))
+            list.insert(1, '학교       : ' + getStr(item.find('SCHOOL_DIV_NM').text))
+            list.insert(2, '            : ' + getStr(item.find('PLVTINST_DIV_NM').text))
+            list.insert(3, '지번 주소 : ' + getStr(item.find('REFINE_ROADNM_ADDR').text))
+            list.insert(4, '도로명 주소 : ' + getStr(item.find('REFINE_LOTNO_ADDR').text))
+            list.insert(5, '우편번호 : ' + getStr(item.find('REFINE_ZIPNO').text))
+            list.insert(6, '전화번호 : ' + getStr(item.find('TELNO').text))
+            list.insert(7, '위도 : ' + getStr(item.find('REFINE_WGS84_LAT').text))
+            list.insert(8, '경도 : ' + getStr(item.find('REFINE_WGS84_LOGT').text))
+
+    with open('xml/전문및대학교현황.xml', 'rb') as f: 
+        strXml = f.read().decode('utf-8')
+    parseData = ElementTree.fromstring(strXml) 
+    elements = parseData.iter('row')
+
+    for item in elements: # " row“ element들
+        part_name = item.find('FACLT_NM')
+
+        if name == part_name.text:
+            list.insert(0, '지역 : ' + getStr(item.find('SIGUN_NM').text))
+            list.insert(1, '학교      : ' + getStr(item.find('SCHOOL_DIV_NM').text))
+            list.insert(2, '           : ' + getStr(item.find('PLVTINST_DIV_NM').text))
+            list.insert(3, '본교/캠퍼스 : ' + getStr(item.find('FACLT_DIV_NM').text))
+            list.insert(4, '지번 주소 : ' + getStr(item.find('REFINE_ROADNM_ADDR').text))
+            list.insert(5, '도로명 주소 : ' + getStr(item.find('REFINE_LOTNO_ADDR').text))
+            list.insert(6, '우편번호 : ' + getStr(item.find('REFINE_ZIPNO').text))
+            list.insert(7, '위도 : ' + getStr(item.find('REFINE_WGS84_LAT').text))
+            list.insert(8, '경도 : ' + getStr(item.find('REFINE_WGS84_LOGT').text))
+            
     
 
 InitScreen()
