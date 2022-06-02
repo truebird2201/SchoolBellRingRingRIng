@@ -147,7 +147,6 @@ def drawGraph(canvas,data,canvasWidth,canvasHeight):
         canvas.create_rectangle(left,top,right,bottom,fill=color,tag='gp',activefill='#cbff52')
 
         canvas.create_text((left+right)//2,top-10,text=data[i],tags='gp')
-        canvas.create_text((left+right)//2,bottom+10,text=i+1,tags='gp')
 def CheckRadio(num):
     global rcheck
     rcheck = num
@@ -479,10 +478,11 @@ def SearchLibrary(chk, onMap=False): # "검색" 버튼 -> "도서관"
                 i = i+1
                 gplist[3]+=1
 
-    graph = Canvas(frameResult,bg='Red',width = 200)
+    graph = Canvas(frameResult,bg='#faffc8',width = 200)
     graph.delete('gp')
-    graph.place(x=310,y=0 ,width=210,height=380,anchor= "nw")
-    drawGraph(graph, gplist, 210, 400)
+    graph.place(x=310,y=0 ,width=210,height=370,anchor= "nw")
+    drawGraph(graph, gplist, 210, 370)
+    graph.create_text(100,360,text=" 초등학교  중학교  고등학교   대학교",tags='gp')
 
 def Local_List_add(locallist):
     with open('xml/초중고등학교현황.xml', 'rb') as f: 
