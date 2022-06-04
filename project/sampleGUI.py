@@ -12,6 +12,7 @@ g_Tk = Tk()
 mp=None
 bm=None
 addE=None
+inputmail=None
 g_Tk.title("학교종이 땡땡땡")
 
 img = PhotoImage(file='image/Title.png')
@@ -264,7 +265,7 @@ def OnSchool(name):              # 학교 팝업
     
 
 def OnMail():         #메일 보내기 팝업
-    global g_Tk
+    global g_Tk, inputmail
     mp = Toplevel(g_Tk)
     mp.title("이메일 주소 입력")
 
@@ -272,14 +273,15 @@ def OnMail():         #메일 보내기 팝업
     inputmail.pack(fill='x',pady = 10,expand=True)
     
     msg = MIMEText('본문: ㅎㅇ')
-    msg['Subject'] = '제목 : 함보'
+    msg['Subject'] = '제목 : asdf'
     senderAddr = 'lsy0112114@gmail.com'
-    recipientAddr = 'lsy0112114@gmail.com'
 
-    bt = Button(mp,text = "보내기",command = lambda : SendMail(senderAddr,recipientAddr,msg))
+    bt = Button(mp,text = "보내기",command = lambda : SendMail(senderAddr,inputmail.get(),msg))
     bt.pack(anchor="s",padx=10,pady=10)
 
+
 def SendMail(fromAddr,toAddr,msg):
+
     import smtplib
     s = smtplib.SMTP("smtp.gmail.com",587)
     s.starttls()
@@ -287,6 +289,8 @@ def SendMail(fromAddr,toAddr,msg):
     s.login('lsy0112114@gmail.com','fozxzasvghelpqvo')
     s.sendmail(fromAddr,[toAddr],msg.as_string())
     s.close()
+    print(type(inputmail.get()))
+    print(inputmail.get())
 
 
 def OnMap():              # 지도 팝업
@@ -522,8 +526,8 @@ def AddInformation(list, name):
         
         if name == part_name.text:
             list.insert(0, '지역 : ' + getStr(item.find('SIGUN_NM').text))
-            list.insert(1, '학교       : ' + getStr(item.find('SCHOOL_DIV_NM').text))
-            list.insert(2, '            : ' + getStr(item.find('PLVTINST_DIV_NM').text))
+            list.insert(1, '분류 : ' + getStr(item.find('SCHOOL_DIV_NM').text))
+            list.insert(2, '종류 : ' + getStr(item.find('PLVTINST_DIV_NM').text))
             list.insert(3, '지번 주소 : ' + getStr(item.find('REFINE_ROADNM_ADDR').text))
             list.insert(4, '도로명 주소 : ' + getStr(item.find('REFINE_LOTNO_ADDR').text))
             list.insert(5, '우편번호 : ' + getStr(item.find('REFINE_ZIPNO').text))
