@@ -14,6 +14,7 @@ bm=None
 addE=None
 inputmail=None
 g_Tk.title("학교종이 땡땡땡")
+info=[]
 
 img = PhotoImage(file='image/Title.png')
 img1 = PhotoImage(file='image/Search.png')
@@ -222,7 +223,7 @@ def AddBookMark(name):               # 북마크 추가
     bm.destroy()
 
 def OnSchool(name):              # 학교 팝업
-    global g_Tk,BookMarkList
+    global g_Tk,BookMarkList,info
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
     fontTitle = font.Font(g_Tk, size=25, weight='bold',family = "나눔고딕")
     sc=Toplevel(g_Tk)
@@ -253,7 +254,7 @@ def OnSchool(name):              # 학교 팝업
         BookButton = Button(framebotton, font = fontNormal,image=img2, text="북마크 추가", command = lambda : AddBookMark(name))
         BookButton.pack(side="left", padx=10, pady=5)
 
-    MailButton = Button(framebotton, font = fontNormal,image=img5, text="메일",command= OnMail)
+    MailButton = Button(framebotton, font = fontNormal,image=img5, text="메일",command= lambda : OnMail(name))
     MailButton.pack(side="right", padx=10, pady=5)
 
     infoBox = Listbox(frameinfo, selectmode='extended',fg ="#ffaa00",selectforeground='White',selectbackground = "#ffaa00",
@@ -262,9 +263,10 @@ def OnSchool(name):              # 학교 팝업
     # infoBox.bind('<<ListboxSelect>>', event_for_listbox)
     infoBox.pack(side='left', anchor='n', padx=10, expand=False, fill="x")
     AddInformation(infoBox, name)
+    info=infoBox.get(0,7)
     
 
-def OnMail():         #메일 보내기 팝업
+def OnMail(name):         #메일 보내기 팝업
     global g_Tk, inputmail
     mp = Toplevel(g_Tk)
     mp.title("이메일 주소 입력")
@@ -272,8 +274,8 @@ def OnMail():         #메일 보내기 팝업
     inputmail = Entry(mp,width=50)
     inputmail.pack(fill='x',pady = 10,expand=True)
     
-    msg = MIMEText('본문: ㅎㅇ')
-    msg['Subject'] = '제목 : asdf'
+    msg = MIMEText(info[0]+'\n'+info[1]+'\n'+info[2]+'\n'+info[3]+'\n'+info[4]+'\n'+info[5]+'\n'+info[6])
+    msg['Subject'] = '학교종이 땡땡땡 - ['+name+'] 정보'
     senderAddr = 'lsy0112114@gmail.com'
 
     bt = Button(mp,text = "보내기",command = lambda : SendMail(senderAddr,inputmail.get(),msg))
@@ -516,6 +518,7 @@ def Local_List_add(locallist):
         locallist.append(part_el.text)
 
 def AddInformation(list, name):
+    global info
     with open('xml/초중고등학교현황.xml', 'rb') as f: 
         strXml = f.read().decode('utf-8')
     parseData = ElementTree.fromstring(strXml) 
@@ -534,7 +537,7 @@ def AddInformation(list, name):
             list.insert(6, '전화번호 : ' + getStr(item.find('TELNO').text))
             list.insert(7, '위도 : ' + getStr(item.find('REFINE_WGS84_LAT').text))
             list.insert(8, '경도 : ' + getStr(item.find('REFINE_WGS84_LOGT').text))
-
+    
     with open('xml/전문및대학교현황.xml', 'rb') as f: 
         strXml = f.read().decode('utf-8')
     parseData = ElementTree.fromstring(strXml) 
