@@ -269,7 +269,6 @@ def OnSchool(name):              # 학교 팝업
     infoBox.pack(side='left', anchor='n', padx=10, expand=False, fill="x")
     AddInformation(infoBox, name)
     info=infoBox.get(0,7)
-    
 
 def OnMail(name):         #메일 보내기 팝업
     global g_Tk, inputmail
@@ -296,8 +295,7 @@ def SendMail(fromAddr,toAddr,msg):
     s.login('lsy0112114@gmail.com','fozxzasvghelpqvo')
     s.sendmail(fromAddr,[toAddr],msg.as_string())
     s.close()
-    print(type(inputmail.get()))
-    print(inputmail.get())
+    destroymp()
 
 
 def OnMap():              # 지도 팝업
@@ -553,8 +551,8 @@ def AddInformation(list, name):
 
         if name == part_name.text:
             list.insert(0, '지역 : ' + getStr(item.find('SIGUN_NM').text))
-            list.insert(1, '학교      : ' + getStr(item.find('SCHOOL_DIV_NM').text))
-            list.insert(2, '           : ' + getStr(item.find('PLVTINST_DIV_NM').text))
+            list.insert(1, '분류 : ' + getStr(item.find('SCHOOL_DIV_NM').text))
+            list.insert(2, '종류 : ' + getStr(item.find('PLVTINST_DIV_NM').text))
             list.insert(3, '본교/캠퍼스 : ' + getStr(item.find('FACLT_DIV_NM').text))
             list.insert(4, '지번 주소 : ' + getStr(item.find('REFINE_ROADNM_ADDR').text))
             list.insert(5, '도로명 주소 : ' + getStr(item.find('REFINE_LOTNO_ADDR').text))
