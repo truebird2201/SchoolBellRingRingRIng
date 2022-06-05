@@ -201,8 +201,13 @@ def Clear():
     f.close()
     bm.destroy()
 
-def AddBookMark(name):               # 북마크 추가
+def AddBookMark(botton ,name):               # 북마크 추가
     global BookMarkList,bm
+
+    if botton['text'] == "북마크 삭제":
+        botton.configure(image=img2, text="북마크 추가")
+    elif botton['text'] == "북마크 추가":
+        botton.configure(image=img6, text="북마크 삭제")
     f=open('BookMark.txt','rb')
     while True:
         try :    
@@ -248,10 +253,10 @@ def OnSchool(name):              # 학교 팝업
             f.close()
             break
     if(name in BookMarkList):
-        BookButton = Button(framebotton, font = fontNormal,image=img6,text="북마크 삭제", command = lambda : AddBookMark(name))
+        BookButton = Button(framebotton, font = fontNormal,image=img6,text="북마크 삭제", command = lambda : AddBookMark(BookButton, name))
         BookButton.pack(side="left", padx=10, pady=5)
     else:
-        BookButton = Button(framebotton, font = fontNormal,image=img2, text="북마크 추가", command = lambda : AddBookMark(name))
+        BookButton = Button(framebotton, font = fontNormal,image=img2, text="북마크 추가", command = lambda : AddBookMark(BookButton, name))
         BookButton.pack(side="left", padx=10, pady=5)
 
     MailButton = Button(framebotton, font = fontNormal,image=img5, text="메일",command= lambda : OnMail(name))
