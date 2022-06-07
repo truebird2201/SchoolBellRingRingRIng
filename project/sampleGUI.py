@@ -26,19 +26,17 @@ img5 = PhotoImage(file='image/Mail.png')
 img6 = PhotoImage(file='image/Cancle.png')
 
 BookMarkList=[]
+
 def event_for_listbox(event): # 리스트 선택 시 내용 출력
     selection = event.widget.curselection()
     if selection:
         index = selection[0]
         data = event.widget.get(index)
         OnSchool(data.split()[1])
-
 def event_for_BookMarklistbox(event): # 북마크리스트 선택 시 내용 출력
     selection = event.widget.curselection()
     if selection:
         OnSchool(event.widget.get(selection))
-
-
 def InitScreen(): 
     f=open('BookMark.txt','ab')
     f.close()
@@ -120,10 +118,7 @@ def InitScreen():
     
     LBScrollbar.pack(side="left", fill='y')
     LBScrollbar.config(command=listBox.yview)
-
-    # 그래프
-
-def drawGraph(canvas,data,canvasWidth,canvasHeight):
+def drawGraph(canvas,data,canvasWidth,canvasHeight): # 그래프
     canvas.delete(ALL)
 
     nData = len(data)
@@ -153,12 +148,9 @@ def drawGraph(canvas,data,canvasWidth,canvasHeight):
 def CheckRadio(num):
     global rcheck
     rcheck = num
-
-
 def onSearch(): # "검색" 버튼 이벤트처리
     global rcheck
     SearchLibrary(rcheck) 
-
 def OnBookMark():              # 북마크 팝업
     global g_Tk,BookMarkList,bm
     f=open('BookMark.txt','rb')
@@ -193,7 +185,6 @@ def OnBookMark():              # 북마크 팝업
 
     ClearButton = Button(bmframe, font = fontNormal,image = img4,text="초기화",command = Clear)
     ClearButton.pack(side="left", padx=10, pady=5)
-
 def Clear():
     global BookMarkList,bm
     BookMarkList=[]
@@ -201,7 +192,6 @@ def Clear():
     pickle.dump(BookMarkList,f)
     f.close()
     bm.destroy()
-
 def AddBookMark(botton ,name):               # 북마크 추가
     global BookMarkList,bm
 
@@ -226,8 +216,6 @@ def AddBookMark(botton ,name):               # 북마크 추가
         f=open('BookMark.txt','wb')
         pickle.dump(BookMarkList,f)
         f.close()
-    bm.destroy()
-
 def OnSchool(name):              # 학교 팝업
     global g_Tk,BookMarkList,info
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
@@ -270,7 +258,6 @@ def OnSchool(name):              # 학교 팝업
     infoBox.pack(side='left', anchor='n', padx=10, expand=False, fill="x")
     AddInformation(infoBox, name)
     info=infoBox.get(0,7)
-
 def OnMail(name):         #메일 보내기 팝업
     global g_Tk, inputmail
     mp = Toplevel(g_Tk)
@@ -283,20 +270,21 @@ def OnMail(name):         #메일 보내기 팝업
     msg['Subject'] = '학교종이 땡땡땡 - ['+name+'] 정보'
     senderAddr = 'lsy0112114@gmail.com'
 
-    bt = Button(mp,text = "보내기",command = lambda : SendMail(senderAddr,inputmail.get(),msg))
+    bt = Button(mp,text = "보내기",bg = "White",command = lambda : SendMail(senderAddr,inputmail.get(),msg))
     bt.pack(anchor="s",padx=10,pady=10)
-
-
 def SendMail(fromAddr,toAddr,msg):
-
+    global inputmail
     import smtplib
     s = smtplib.SMTP("smtp.gmail.com",587)
     s.starttls()
     print("입력한 메일의 문자길이 = ",spam.strlen(toAddr))
     s.login('lsy0112114@gmail.com','fozxzasvghelpqvo')
-    s.sendmail(fromAddr,[toAddr],msg.as_string())
+    try:
+        s.sendmail(fromAddr,[toAddr],msg.as_string())
+    except:
+        inputmail.delete(0,"end")
+        inputmail.insert(0,"존재하지 않는 메일입니다.")
     s.close()
-
 
 def OnMap():              # 지도 팝업
     global g_Tk
@@ -329,15 +317,10 @@ def OnMap():              # 지도 팝업
     # print(marker_1.position, marker_1.text) # get position and text 
     marker_1.set_text("한국공학대학교") # set new text 
     map_widget.set_zoom(13) # 0~19 (19 is the highest zoom level)
-
-    
-
 def onSearch_Map():
     SearchLibrary(4, True)
-
 def getStr(s): 
     return '' if not s else s
-
 def SearchLibrary(chk, onMap=False): # "검색" 버튼 -> "도서관"
     global listBox, LocalCombo
     gplist = [0,0,0,0]
@@ -493,7 +476,6 @@ def SearchLibrary(chk, onMap=False): # "검색" 버튼 -> "도서관"
     graph.place(x=310,y=0 ,width=210,height=370,anchor= "nw")
     drawGraph(graph, gplist, 210, 370)
     graph.create_text(100,360,text=" 초등학교  중학교  고등학교   대학교",tags='gp')
-
 def Local_List_add(locallist):
     with open('xml/초중고등학교현황.xml', 'rb') as f: 
         strXml = f.read().decode('utf-8')
@@ -519,7 +501,6 @@ def Local_List_add(locallist):
         if part_el.text in locallist: 
             continue 
         locallist.append(part_el.text)
-
 def AddInformation(list, name):
     global info
     with open('xml/초중고등학교현황.xml', 'rb') as f: 
@@ -559,8 +540,6 @@ def AddInformation(list, name):
             list.insert(6, '우편번호 : ' + getStr(item.find('REFINE_ZIPNO').text))
             list.insert(7, '위도 : ' + getStr(item.find('REFINE_WGS84_LAT').text))
             list.insert(8, '경도 : ' + getStr(item.find('REFINE_WGS84_LOGT').text))
-            
-    
 
 InitScreen()
 g_Tk.mainloop()
