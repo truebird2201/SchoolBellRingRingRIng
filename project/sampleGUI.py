@@ -7,6 +7,7 @@ from xml.etree import ElementTree
 from email.mime.text import MIMEText
 import tkintermapview
 import pickle
+import spam
 
 g_Tk = Tk()
 mp=None
@@ -291,11 +292,10 @@ def SendMail(fromAddr,toAddr,msg):
     import smtplib
     s = smtplib.SMTP("smtp.gmail.com",587)
     s.starttls()
-
+    print("입력한 메일의 문자길이 = ",spam.strlen(toAddr))
     s.login('lsy0112114@gmail.com','fozxzasvghelpqvo')
     s.sendmail(fromAddr,[toAddr],msg.as_string())
     s.close()
-    destroymp()
 
 
 def OnMap():              # 지도 팝업
