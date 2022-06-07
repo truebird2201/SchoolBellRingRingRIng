@@ -5,6 +5,7 @@ from tkinter import font
 from tkinter import ttk
 from xml.etree import ElementTree
 from email.mime.text import MIMEText
+from distutils.core import setup
 import tkintermapview
 import pickle
 import spam
