@@ -39,7 +39,7 @@ def event_for_BookMarklistbox(event): # 북마크리스트 선택 시 내용 출
     if selection:
         OnSchool(event.widget.get(selection))
 def InitScreen(): 
-    f=open('BookMark.txt','ab')
+    f=open('xml/BookMark.txt','ab')
     f.close()
     fontTitle = font.Font(g_Tk, size=18, weight='bold', family = '나눔고딕')
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
@@ -154,7 +154,7 @@ def onSearch(): # "검색" 버튼 이벤트처리
     SearchLibrary(rcheck) 
 def OnBookMark():              # 북마크 팝업
     global g_Tk,BookMarkList,bm
-    f=open('BookMark.txt','rb')
+    f=open('xml/BookMark.txt','rb')
     while True:
         try :    
             BookMarkList=pickle.load(f)
@@ -189,7 +189,7 @@ def OnBookMark():              # 북마크 팝업
 def Clear():
     global BookMarkList,bm
     BookMarkList=[]
-    f=open('BookMark.txt','wb')
+    f=open('xml/BookMark.txt','wb')
     pickle.dump(BookMarkList,f)
     f.close()
     bm.destroy()
@@ -200,7 +200,7 @@ def AddBookMark(botton ,name):               # 북마크 추가
         botton.configure(image=img2, text="북마크 추가")
     elif botton['text'] == "북마크 추가":
         botton.configure(image=img6, text="북마크 삭제")
-    f=open('BookMark.txt','rb')
+    f=open('xml/BookMark.txt','rb')
     while True:
         try :    
             BookMarkList=pickle.load(f)
@@ -208,13 +208,13 @@ def AddBookMark(botton ,name):               # 북마크 추가
             f.close()
             break
     if (name not in BookMarkList):
-        f=open('BookMark.txt','wb')
+        f=open('xml/BookMark.txt','wb')
         BookMarkList.append(name)
         pickle.dump(BookMarkList,f)
         f.close()
     else:
         BookMarkList.remove(name)
-        f=open('BookMark.txt','wb')
+        f=open('xml/BookMark.txt','wb')
         pickle.dump(BookMarkList,f)
         f.close()
 def OnSchool(name):              # 학교 팝업
@@ -235,7 +235,7 @@ def OnSchool(name):              # 학교 팝업
     frameinfo.pack()
     framebotton = Frame(sc, pady=10, bg='#fffbd2')
     framebotton.pack(side="bottom", fill="both", expand=True)
-    f=open('BookMark.txt','rb')
+    f=open('xml/BookMark.txt','rb')
     while True:
         try :    
             BookMarkList=pickle.load(f)
