@@ -8,7 +8,7 @@ from xml.dom.minidom import parseString
 
 schoolkey = 'c7c84da8feb844a1a455d734bf220b48'
 universitykey = 'ab579728f48e403cb9312b8d10f86c03'
-TOKEN = '5431574363:AAEzqEC2KYCu2ZysP_Z-qJgbmUpI4GlVUD0'
+TOKEN = '5584645645:AAHxsfkTRqlRxCBYg8ZIOG4PreCaFdt_1TA'
 MAX_MSG_LENGTH = 300
 bot = telepot.Bot(TOKEN)
 

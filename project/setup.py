@@ -6,4 +6,7 @@ setup(
     version='1.0',
     py_modules=['School_Bell_Ring'],
     packages=['image'],
+    package_data = {'image': ['*.png']},
+
+    
 )
