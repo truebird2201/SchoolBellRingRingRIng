@@ -38,7 +38,7 @@ def event_for_BookMarklistbox(event): # 북마크리스트 선택 시 내용 출
     selection = event.widget.curselection()
     if selection:
         OnSchool(event.widget.get(selection))
-def InitScreen(): 
+def InitScreen():               # 화면그리기
     f=open('xml/BookMark.txt','ab')
     f.close()
     fontTitle = font.Font(g_Tk, size=18, weight='bold', family = '나눔고딕')
@@ -146,7 +146,7 @@ def drawGraph(canvas,data,canvasWidth,canvasHeight): # 그래프
         canvas.create_rectangle(left,top,right,bottom,fill=color,tag='gp',activefill='#cbff52')
 
         canvas.create_text((left+right)//2,top-10,text=data[i],tags='gp')
-def CheckRadio(num):
+def CheckRadio(num):                # 라디오버튼
     global rcheck
     rcheck = num
 def onSearch(): # "검색" 버튼 이벤트처리
@@ -186,7 +186,7 @@ def OnBookMark():              # 북마크 팝업
 
     ClearButton = Button(bmframe, font = fontNormal,image = img4,text="초기화",command = Clear)
     ClearButton.pack(side="left", padx=10, pady=5)
-def Clear():
+def Clear():                    # 북마크 초기화
     global BookMarkList,bm
     BookMarkList=[]
     f=open('xml/BookMark.txt','wb')
@@ -273,7 +273,7 @@ def OnMail(name):         #메일 보내기 팝업
 
     bt = Button(mp,text = "보내기",bg = "White",command = lambda : SendMail(senderAddr,inputmail.get(),msg))
     bt.pack(anchor="s",padx=10,pady=10)
-def SendMail(fromAddr,toAddr,msg):
+def SendMail(fromAddr,toAddr,msg):      #메일 보내기
     global inputmail
     import smtplib
     s = smtplib.SMTP("smtp.gmail.com",587)
@@ -286,7 +286,6 @@ def SendMail(fromAddr,toAddr,msg):
         inputmail.delete(0,"end")
         inputmail.insert(0,"존재하지 않는 메일입니다.")
     s.close()
-
 def OnMap():              # 지도 팝업
     global g_Tk
     fontNormal = font.Font(g_Tk, size=15, weight='bold')
@@ -318,7 +317,7 @@ def OnMap():              # 지도 팝업
     # print(marker_1.position, marker_1.text) # get position and text 
     marker_1.set_text("한국공학대학교") # set new text 
     map_widget.set_zoom(13) # 0~19 (19 is the highest zoom level)
-def onSearch_Map():
+def onSearch_Map():                 #지도 검색
     SearchLibrary(4, True)
 def getStr(s): 
     return '' if not s else s
