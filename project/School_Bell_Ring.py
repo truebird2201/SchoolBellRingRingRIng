@@ -284,7 +284,7 @@ def SendMail(fromAddr,toAddr,msg):      #메일 보내기
         s.sendmail(fromAddr,[toAddr],msg.as_string())
     except:
         inputmail.delete(0,"end")
-        inputmail.insert(0,"존재하지 않는 메일입니다.")
+        inputmail.insert(0,"올바르지 않은 메일입니다.")
     s.close()
 def OnMap():              # 지도 팝업
     global g_Tk
